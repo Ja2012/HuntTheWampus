@@ -1,0 +1,39 @@
+#pragma once
+
+namespace Consts
+{
+	// Default resolution 1920x1080. 
+	// Means game mainly for 16:9 aspect ratio, otherwize (16:10, 21:9) will be kind of creepy after rescale.
+	// So TODO: make work for different aspect ratios 
+	inline constexpr int ScrX{ 1920 };
+	inline constexpr int ScrY{ 1080 };	
+
+	// Tunnels
+	inline const char* TunnelImageFileName{ "Underground_tunnel3.png" };
+
+	inline constexpr int TunnelImgSizeX{ 500 };
+	inline constexpr int TunnelImgSizeY{ 500 };
+
+	inline constexpr int Tunnel1ImgPosX{ 105 };
+	inline constexpr int Tunnel1ImgPosY{ 30 };
+
+	inline constexpr int Tunnel2ImgPosX{ 710 };
+	inline constexpr int Tunnel2ImgPosY{ 30 };
+
+	inline constexpr int Tunnel3ImgPosX{ 1315 };
+	inline constexpr int Tunnel3ImgPosY{ 30 };
+
+	// Map
+	inline const char* MapImageFileName{ "map2.png" };
+
+	inline constexpr int MapImgSizeX{ 550 };
+	inline constexpr int MapImgSizeY{ 550 };
+
+	inline constexpr int MapImgPosX{ 685 };
+	inline constexpr int MapImgPosY{ 530 };
+
+	//		Cave Widget
+	inline constexpr int CaveWidSizeX{ 50 };
+	inline constexpr int CaveWidSizeY{ 50 };
+
+}
