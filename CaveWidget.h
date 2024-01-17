@@ -12,6 +12,7 @@ public:
 	) : Fl_Box(FL_NO_BOX, X, Y, W, H, Label)
 	{
 		color(FL_BLACK);
+		labelcolor(FL_DARK_BLUE);
 		labeltype(_FL_EMBOSSED_LABEL);
 		labelsize(h() * 2 / 3);
 		labelfont(FL_TIMES_BOLD_ITALIC);	

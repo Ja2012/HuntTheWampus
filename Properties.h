@@ -1,4 +1,5 @@
 #pragma once
+
 #include "Point.h"
 #include "Utilities.h"
 #include "Constants.h"
@@ -6,6 +7,7 @@
 Point GetScreenResolution();
 Point& Resize(Point&& Pnt);
 int Resize(int Value, bool horizontal = true);
+
 
 namespace Props
 {
@@ -32,8 +34,8 @@ namespace Props
 	const Point MapImgSize = Resize(Point{ Consts::MapImgSizeX, Consts::MapImgSizeY });
 	const Point MapImgPos = Resize(Point{ Consts::MapImgPosX, Consts::MapImgPosY});
 
-	//		Cave on map
+	//		Caves on map
 	const Point CaveWidSize = Resize(Point{ Consts::CaveWidSizeX, Consts::CaveWidSizeY});
-
+	const int CaveDrawYOffset = Resize(CaveDrawYOffset, false);
 };
 
