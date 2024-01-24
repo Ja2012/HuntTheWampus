@@ -19,5 +19,6 @@ MapWidget::MapWidget(Fl_Image* Image, int X, int Y, int W, int H) : Fl_Box(X, Y,
 			Props::CavesList[Cave.AdjCaveNumbers[2]].Pos
 			)
 		);
+		CaveWidgets[i]->hide();
 	}
 }

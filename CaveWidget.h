@@ -5,7 +5,7 @@
 #include "Point.h"
 #include "Line.h"
 
-class CaveWidget : Fl_Box
+class CaveWidget : public Fl_Box
 {
 public:
 	CaveWidget(int X, int Y,
@@ -18,4 +18,5 @@ private:
 	Line Line1;
 	Line Line2;
 	Line Line3;
+	bool VisibleTunnels{ false };
 };

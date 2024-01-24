@@ -55,15 +55,16 @@ CaveWidget::CaveWidget(int X, int Y, const char* Label,
 		Line{ WidgetCenter, Point { AdjCave3.X + w() / 2, AdjCave3.Y + h() / 2 } },
 		Offset
 	);
-
-
 }
 
 void CaveWidget::draw()
 {
 	Fl_Box::draw();
-	fl_line(Line1.Start.X, Line1.Start.Y, Line1.End.X, Line1.End.Y);
-	fl_line(Line2.Start.X, Line2.Start.Y, Line2.End.X, Line2.End.Y);
-	fl_line(Line3.Start.X, Line3.Start.Y, Line3.End.X, Line3.End.Y);
+	if (VisibleTunnels)
+	{
+		fl_line(Line1.Start.X, Line1.Start.Y, Line1.End.X, Line1.End.Y);
+		fl_line(Line2.Start.X, Line2.Start.Y, Line2.End.X, Line2.End.Y);
+		fl_line(Line3.Start.X, Line3.Start.Y, Line3.End.X, Line3.End.Y);
+	}
 
 }

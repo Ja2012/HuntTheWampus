@@ -17,5 +17,6 @@ struct Cave
 	const char* Label;
 	Point Pos;
 	std::array<int, 3> AdjCaveNumbers;
-	std::vector<Unit> Units;
+	std::vector<Cave*> AdjacentCaves;
+	std::vector<Unit*> Units;
 };

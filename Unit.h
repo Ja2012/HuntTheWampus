@@ -2,11 +2,10 @@
 
 #include "Cave.h"
 
-class Cave;
+struct Cave;
 
-class Unit
+struct Unit
 {
-public:
     Cave* CavePtr;
     virtual ~Unit() {};
 };
