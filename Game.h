@@ -18,10 +18,10 @@ public:
 
     void Start();
     void _DebugPrintCavesUnits();
+    void PrapareGame();
 
 private:
     // prep & backwork
-    void PrapareGame();
     void InitRandom();
     void LinkCaves();
     void PlaceUnits();

@@ -11,6 +11,7 @@
 #include "FLTK.h"
 
 #include "GameWindow.h"
+#include "Game.h"
 
 int main() 
 {
@@ -19,5 +20,7 @@ int main()
 	GameWindow* Window = new GameWindow{};
 	Window->end();
 	Window->show();
+	Game GameObj{};
+	GameObj.PrapareGame();
 	return Fl::run();
 }

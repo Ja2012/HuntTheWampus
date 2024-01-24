@@ -36,7 +36,19 @@ namespace Consts
 	inline constexpr int CaveWidSizeX{ 40 };
 	inline constexpr int CaveWidSizeY{ 40 };
 	
-	//		Caves on Map
+	//		Caves on Map. Check Properties for positions
 	inline constexpr int CaveDrawYOffset{ 0 };
+
+	// Arrows
+	inline const char* ArrowImgFileName{ "arrow.png" };
+
+	inline constexpr int ArrowImgSizeX{ 320 };
+	inline constexpr int ArrowImgSizeY{ 98 };
+
+	inline constexpr int ArrowImgPosX{ 350 };
+	inline constexpr int ArrowImgPosY{ 530 };
+
+	inline constexpr int ArrowsYDistance{ 108 };
+
 
 }

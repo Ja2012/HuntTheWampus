@@ -15,33 +15,33 @@ int Resize(int Value, bool horizontal = true);
 namespace Props
 {
 	// Screen
-	const Point ScrRes = GetScreenResolution();
+	inline const Point ScrRes = GetScreenResolution();
 
 	inline const double ResizeWRatio = ScrRes.X / double(Consts::ScrX);
 	inline const double ResizeHRatio = ScrRes.Y / double(Consts::ScrY);
 
 	inline const int ScrX = Resize(Consts::ScrX);
-	inline int ScrY = Resize(Consts::ScrY, false);
+	inline const int ScrY = Resize(Consts::ScrY, false);
 
 	inline const int CenterW = ScrX / 2;
 	inline const int CenterH = ScrY / 2;
-	const Point Center = Point{ CenterW, CenterH };
+	inline const Point Center = Point{ CenterW, CenterH };
 
 	// GameWindow
-	const Point TunnelImgSize = Resize(Point{ Consts::TunnelImgSizeX, Consts::TunnelImgSizeY });
-	const Point Tunnel1ImgPos = Resize(Point{ Consts::Tunnel1ImgPosX, Consts::Tunnel1ImgPosY });
-	const Point Tunnel2ImgPos = Resize(Point{ Consts::Tunnel2ImgPosX, Consts::Tunnel2ImgPosY });
-	const Point Tunnel3ImgPos = Resize(Point{ Consts::Tunnel3ImgPosX, Consts::Tunnel3ImgPosY });
+	inline const Point TunnelImgSize = Resize(Point{ Consts::TunnelImgSizeX, Consts::TunnelImgSizeY });
+	inline const Point Tunnel1ImgPos = Resize(Point{ Consts::Tunnel1ImgPosX, Consts::Tunnel1ImgPosY });
+	inline const Point Tunnel2ImgPos = Resize(Point{ Consts::Tunnel2ImgPosX, Consts::Tunnel2ImgPosY });
+	inline const Point Tunnel3ImgPos = Resize(Point{ Consts::Tunnel3ImgPosX, Consts::Tunnel3ImgPosY });
 
 	//		Map
-	const Point MapImgSize = Resize(Point{ Consts::MapImgSizeX, Consts::MapImgSizeY });
-	const Point MapImgPos = Resize(Point{ Consts::MapImgPosX, Consts::MapImgPosY});
+	inline const Point MapImgSize = Resize(Point{ Consts::MapImgSizeX, Consts::MapImgSizeY });
+	inline const Point MapImgPos = Resize(Point{ Consts::MapImgPosX, Consts::MapImgPosY});
 
 	//		Caves on map
-	const Point CaveWidSize = Resize(Point{ Consts::CaveWidSizeX, Consts::CaveWidSizeY});
-	const int CaveDrawYOffset = Resize(Consts::CaveDrawYOffset, false);
+	inline const Point CaveWidSize = Resize(Point{ Consts::CaveWidSizeX, Consts::CaveWidSizeY});
+	inline const int CaveDrawYOffset = Resize(Consts::CaveDrawYOffset, false);
 
-	inline std::array<Cave, 21> CavesList
+	inline const std::array<Cave, 21> CavesList
 	{
 		Cave {0, "0", Point {0, 0}, {0,0,0}},
 
@@ -68,9 +68,15 @@ namespace Props
 		Cave {18, "18", Resize(Point {977   ,748   }), {9, 17, 19}},
 		Cave {19, "19", Resize(Point {998   ,823   }), {11, 18, 20}},
 		Cave {20, "20", Resize(Point {938   ,867   }), {13, 16, 19}},
-
 	};
 
+	// Arrows
+	inline const int ArrowImgSizeX = Resize(Consts::ArrowImgSizeX);
+	inline const int ArrowImgSizeY = Resize(Consts::ArrowImgSizeY, false);
+	inline const int ArrowImgPosX = Resize(Consts::ArrowImgPosX);
+	inline const int ArrowImgPosY = Resize(Consts::ArrowImgPosY, false);
+
+	inline const int ArrowsYDistance = Resize(Consts::ArrowsYDistance, false);
 
 };
 

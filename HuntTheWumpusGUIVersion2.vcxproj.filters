@@ -95,6 +95,9 @@
     <ClInclude Include="Unit.h">
       <Filter>Header Files\Entities</Filter>
     </ClInclude>
+    <ClInclude Include="ArrowWidget.h">
+      <Filter>Header Files\Widgets</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="COPYING.WTFPL" />

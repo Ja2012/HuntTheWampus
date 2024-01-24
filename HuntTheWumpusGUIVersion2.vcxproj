@@ -147,6 +147,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Arrow.h" />
+    <ClInclude Include="ArrowWidget.h" />
     <ClInclude Include="Bat.h" />
     <ClInclude Include="Cave.h" />
     <ClInclude Include="CaveWidget.h" />
