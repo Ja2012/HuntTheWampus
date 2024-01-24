@@ -7,6 +7,7 @@
 #include "Unit.h"
 #include "Wampus.h"
 #include "Player.h"
+#include "GameWindow.h"
 
 enum class PlayerAnswer {Move, Shoot, Yes, No};
 
@@ -21,6 +22,8 @@ public:
     void PrapareGame();
 
 private:
+    GameWindow* GUI = new GameWindow{};
+
     // prep & backwork
     void InitRandom();
     void LinkCaves();

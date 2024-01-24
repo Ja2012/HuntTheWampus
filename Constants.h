@@ -50,5 +50,11 @@ namespace Consts
 
 	inline constexpr int ArrowsYDistance{ 108 };
 
+	// Exit button
+	inline constexpr int ExitBtnSizeX{ 50 };
+	inline constexpr int ExitBtnSizeY{ 50 };
+	inline constexpr int ExitBtnPosX{ 1860 };
+	inline constexpr int ExitBtnPosY{ 10 };
+
 
 }

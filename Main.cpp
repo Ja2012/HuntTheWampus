@@ -5,6 +5,7 @@
 * as published by Sam Hocevar. See the COPYING file for more details.
 */
 
+// FLTK manual https://www.fltk.org/doc-1.3/basics.html
 
 #include <iostream>
 
@@ -17,10 +18,8 @@ int main()
 {
 	fl_register_images();
 
-	GameWindow* Window = new GameWindow{};
-	Window->end();
-	Window->show();
 	Game GameObj{};
+
 	GameObj.PrapareGame();
 	return Fl::run();
 }

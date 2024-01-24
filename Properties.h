@@ -78,5 +78,11 @@ namespace Props
 
 	inline const int ArrowsYDistance = Resize(Consts::ArrowsYDistance, false);
 
+	// Exit button
+	inline int ExitBtnSizeX = Resize(Consts::ExitBtnSizeX);
+	inline int ExitBtnSizeY = Resize(Consts::ExitBtnSizeY);
+	inline int ExitBtnPosX = Resize(Consts::ExitBtnPosX);
+	inline int ExitBtnPosY = Resize(Consts::ExitBtnPosY);
+
 };
 
