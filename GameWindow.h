@@ -11,17 +11,7 @@ class GameWindow : public Fl_Double_Window
 {
 public:	
 
-	GameWindow(int Width = 300, int Height = 300, const char* Label = "Охота на Вампуса") : Fl_Double_Window(Width, Height, Label)
-	{
-		color(FL_BLACK);
-		size(Props::ScrRes.X, Props::ScrRes.Y);
-		fullscreen();
-
-		//Fl_Button* box = new Fl_Button(743, 590, 432, 432);
-
-
-
-	};
+	GameWindow(int Width = 300, int Height = 300, const char* Label = "Охота на Вампуса");
 private:
 
 	Fl_Shared_Image* TunnelImg = static_cast<Fl_Shared_Image*>(Fl_Shared_Image::get(Consts::TunnelImageFileName)->copy(Props::TunnelImgSize.X, Props::TunnelImgSize.Y));
