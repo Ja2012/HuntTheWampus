@@ -56,5 +56,5 @@ namespace Consts
 	inline constexpr int ExitBtnPosX{ 1860 };
 	inline constexpr int ExitBtnPosY{ 10 };
 
-
+	// 
 }
