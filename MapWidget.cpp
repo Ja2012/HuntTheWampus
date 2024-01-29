@@ -28,10 +28,16 @@ void MapWidget::ShowCave(int CaveNumber)
 	CaveWidgets[CaveNumber]->show();
 }
 
-void MapWidget::ShowPlayerInCave(int CaveNumber)
+void MapWidget::SetPlayerCaveMark(int CaveNumber)
 {
 	CaveWidget* CaveW = CaveWidgets[CaveNumber];
 	CaveW->VisibleTunnels = true;
 	CaveW->box(FL_OVAL_FRAME);
-	CaveW->show();
+}
+
+void MapWidget::UnsetPlayerCaveMark(int CaveNumber)
+{
+	CaveWidget* CaveW = CaveWidgets[CaveNumber];
+	CaveW->box(FL_NO_BOX);
+	redraw();
 }

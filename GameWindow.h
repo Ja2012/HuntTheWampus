@@ -27,5 +27,5 @@ public:
 	Fl_PNG_Image* MapImg = static_cast<Fl_PNG_Image*>(Fl_PNG_Image(Consts::MapImageFileName).copy(Props::MapImgSize.X, Props::MapImgSize.Y));
 	MapWidget* Map = new MapWidget(MapImg);
 
-	Fl_Button* ExitBtn;
+	Fl_Button* QuitBtn;
 };

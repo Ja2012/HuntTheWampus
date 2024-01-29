@@ -15,5 +15,6 @@ public:
 	std::vector<CaveWidget*> CaveWidgets;
 
 	void ShowCave(int CaveNumber);
-	void ShowPlayerInCave(int CaveNumber);
+	void SetPlayerCaveMark(int CaveNumber);
+	void UnsetPlayerCaveMark(int CaveNumber);
 };

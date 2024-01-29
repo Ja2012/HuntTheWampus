@@ -21,6 +21,8 @@ public:
     void _DebugPrintCavesUnits();
     void PrapareGame();
 
+    static inline Game* GameObj;
+
 private:
     GameWindow* GUI = new GameWindow{};
 
@@ -38,7 +40,7 @@ private:
     PlayerAnswer AskWhatPlayerWantToDo();
     PlayerAnswer AskYesNo();
     void ResolveCollision(Cave* CavePtr);
-    void PlayerMove();
+    void PlayerMove(int TunnelNumber);
     void PlayerShoot();
     void PrintInfo();
     void MoveUnit(Unit* TargetUnit, Cave* FromCave, Cave* ToCave);
@@ -57,6 +59,10 @@ private:
     int roll_d3() {return std::uniform_int<int> {1, 3} (RandomEngine);}
     int roll_d20() {return std::uniform_int<int> {1, 20} (RandomEngine);}
     int roll_d100() {return std::uniform_int<int> {1, 100} (RandomEngine);}
-};
 
+    // callbacks
+    static void CallbackKeyboardHit(Fl_Widget* Widget);
+    static void CallbackClickQuit(Fl_Widget* Widget);
+    static void CallbackClickTunnel(Fl_Widget* Widget, void* TunnelNumber);
+};
 

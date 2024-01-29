@@ -18,6 +18,12 @@
 
 Game::Game()
 {
+    GameObj = this;
+    GUI->callback(CallbackKeyboardHit);
+    GUI->QuitBtn->callback(CallbackClickQuit);
+    GUI->Tunnel1->callback(CallbackClickTunnel, GUI->Tunnel1->TunnelNum);
+    GUI->Tunnel2->callback(CallbackClickTunnel, GUI->Tunnel2->TunnelNum);
+    GUI->Tunnel3->callback(CallbackClickTunnel, GUI->Tunnel3->TunnelNum);
 }
 
 void Game::MainLoop()
@@ -32,7 +38,7 @@ void Game::MainLoop()
         PlayerAnswer PlayerDesicion = AskWhatPlayerWantToDo();
         if (PlayerDesicion == PlayerAnswer::Move)
         {
-            PlayerMove();
+            //PlayerMove();
         }
         else if (PlayerDesicion == PlayerAnswer::Shoot)
         {
@@ -64,15 +70,7 @@ void Game::PrapareGame()
     LinkCaves();
     PlaceUnits();
 
-    GUI->Map->ShowCave(PlayerPtr->CavePtr->Num);
-    GUI->Map->ShowPlayerInCave(PlayerPtr->CavePtr->Num);
-    for (int CaveNumber : PlayerPtr->CavePtr->AdjCaveNumbers)
-    {
-        GUI->Map->ShowCave(CaveNumber);
-    }
-    GUI->Tunnel1->SetLabel(PlayerPtr->CavePtr->AdjCaveNumbers[0]);
-    GUI->Tunnel2->SetLabel(PlayerPtr->CavePtr->AdjCaveNumbers[1]);
-    GUI->Tunnel3->SetLabel(PlayerPtr->CavePtr->AdjCaveNumbers[2]);
+    PlayerMove(PlayerPtr->CavePtr->Num);
 }
 
 void Game::Start()
@@ -99,6 +97,10 @@ void Game::Start()
 
 void Game::MoveUnit(Unit* TargetUnitPtr, Cave* FromCavePtr, Cave* ToCavePtr)
 {
+    if (FromCavePtr == ToCavePtr)
+    {
+        return;
+    }
     // add unit to units in new cave
     ToCavePtr->Units.push_back(TargetUnitPtr);
 
@@ -137,6 +139,29 @@ void Game::WaitForKey()
     std::wcout << L"(нажмите любую кнопку чтобы продолжить)\n";
     while(!_kbhit()) { }
     _getch();
+}
+
+void Game::CallbackKeyboardHit(Fl_Widget* Widget)
+{
+    if (Fl::event() == FL_SHORTCUT && Fl::event_key() == FL_Escape)
+    {
+        return; // ignore Escape
+    }
+}
+
+void Game::CallbackClickQuit(Fl_Widget* Widget)
+{
+    if (Fl::event() == FL_SHORTCUT && Fl::event_key() == FL_Escape)
+    {
+        return; // ignore Escape
+    }
+	exit(0); 
+}
+
+void Game::CallbackClickTunnel(Fl_Widget* Widget, void* TunnelNumber)
+{
+    std::cout << *static_cast<int*>(TunnelNumber) << '\n';
+    GameObj->PlayerMove(*static_cast<int*>(TunnelNumber));
 }
 
 
@@ -301,50 +326,23 @@ inline bool IsNumber(const std::wstring& Str)
 }
 
 
-void Game::PlayerMove()
+void Game::PlayerMove(int TunnelNumber)
 {
-    std::wstring Input;
-    std::wstring TryAgainMessage;
-    int ChosenCaveNumber{};
-
-    Cave* AdjacentCave1 = PlayerPtr->CavePtr->AdjacentCaves[0];
-    Cave* AdjacentCave2 = PlayerPtr->CavePtr->AdjacentCaves[1];
-    Cave* AdjacentCave3 = PlayerPtr->CavePtr->AdjacentCaves[2];
-
-    TryAgainMessage =
+    GUI->Map->UnsetPlayerCaveMark(PlayerPtr->CavePtr->Num);
+    MoveUnit(PlayerPtr, PlayerPtr->CavePtr, Caves[TunnelNumber]);
+    GUI->Map->SetPlayerCaveMark(TunnelNumber);
+    
+    GUI->Map->ShowCave(TunnelNumber);
+    for (int CaveNumber : PlayerPtr->CavePtr->AdjCaveNumbers)
     {
-        L"Пожалуйста напишите одно число: " +
-        std::to_wstring(AdjacentCave1->Num) +
-        L" или " + std::to_wstring(AdjacentCave2->Num) +
-        L" или " + std::to_wstring(AdjacentCave3->Num) + L'\n'
-    };
-
-    while (true)
-    {
-        std::wcout << L"Введите номер пещеры: ";
-        std::wcin >> Input;
-        if (IsNumber(Input))
-        {
-            ChosenCaveNumber = std::stoi(Input);
-        }
-        else
-        {
-            std::wcout << TryAgainMessage;
-            continue;       
-        }
-
-        if (0 < ChosenCaveNumber && ChosenCaveNumber < 21 &&
-            (ChosenCaveNumber == AdjacentCave1->Num || ChosenCaveNumber == AdjacentCave2->Num || ChosenCaveNumber == AdjacentCave3->Num))
-        {
-            MoveUnit(PlayerPtr, PlayerPtr->CavePtr, Caves[ChosenCaveNumber]);
-            break;
-        }
-        else
-        {
-            std::wcout << TryAgainMessage;
-            continue;
-        }
+        GUI->Map->ShowCave(CaveNumber);
     }
+
+    GUI->Tunnel1->SetLabel(PlayerPtr->CavePtr->AdjCaveNumbers[0]);
+    GUI->Tunnel2->SetLabel(PlayerPtr->CavePtr->AdjCaveNumbers[1]);
+    GUI->Tunnel3->SetLabel(PlayerPtr->CavePtr->AdjCaveNumbers[2]);
+
+    GUI->Map->redraw();
 }
 
 void Game::PlayerShoot()
