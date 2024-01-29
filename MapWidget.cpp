@@ -22,3 +22,16 @@ MapWidget::MapWidget(Fl_Image* Image, int X, int Y, int W, int H) : Fl_Box(X, Y,
 		CaveWidgets[i]->hide();
 	}
 }
+
+void MapWidget::ShowCave(int CaveNumber)
+{
+	CaveWidgets[CaveNumber]->show();
+}
+
+void MapWidget::ShowPlayerInCave(int CaveNumber)
+{
+	CaveWidget* CaveW = CaveWidgets[CaveNumber];
+	CaveW->VisibleTunnels = true;
+	CaveW->box(FL_OVAL_FRAME);
+	CaveW->show();
+}

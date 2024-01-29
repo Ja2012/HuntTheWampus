@@ -14,9 +14,9 @@ public:
 		int W = Props::CaveWidSize.X, int H = Props::CaveWidSize.Y
 	);
 	void draw();
+	bool VisibleTunnels{ false };
 private:
 	Line Line1;
 	Line Line2;
 	Line Line3;
-	bool VisibleTunnels{ false };
 };

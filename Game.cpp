@@ -63,6 +63,16 @@ void Game::PrapareGame()
     InitRandom();
     LinkCaves();
     PlaceUnits();
+
+    GUI->Map->ShowCave(PlayerPtr->CavePtr->Num);
+    GUI->Map->ShowPlayerInCave(PlayerPtr->CavePtr->Num);
+    for (int CaveNumber : PlayerPtr->CavePtr->AdjCaveNumbers)
+    {
+        GUI->Map->ShowCave(CaveNumber);
+    }
+    GUI->Tunnel1->SetLabel(PlayerPtr->CavePtr->AdjCaveNumbers[0]);
+    GUI->Tunnel2->SetLabel(PlayerPtr->CavePtr->AdjCaveNumbers[1]);
+    GUI->Tunnel3->SetLabel(PlayerPtr->CavePtr->AdjCaveNumbers[2]);
 }
 
 void Game::Start()
