@@ -42,13 +42,13 @@ namespace Consts
 	// Arrows
 	inline const char* ArrowImgFileName{ "arrow.png" };
 
-	inline constexpr int ArrowImgSizeX{ 320 };
-	inline constexpr int ArrowImgSizeY{ 98 };
+	inline constexpr int ArrowImgSizeX{ 228 };
+	inline constexpr int ArrowImgSizeY{ 69 };
 
-	inline constexpr int ArrowImgPosX{ 350 };
-	inline constexpr int ArrowImgPosY{ 530 };
+	inline constexpr int ArrowImgPosX{ 26 };
+	inline constexpr int ArrowImgPosY{ 593 };
 
-	inline constexpr int ArrowsYDistance{ 108 };
+	inline constexpr int ArrowsYDistance{ 99 };
 
 	// Exit button
 	inline constexpr int ExitBtnSizeX{ 50 };
