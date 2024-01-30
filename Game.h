@@ -64,5 +64,6 @@ private:
     static void CallbackKeyboardHit(Fl_Widget* Widget);
     static void CallbackClickQuit(Fl_Widget* Widget);
     static void CallbackClickTunnel(Fl_Widget* Widget, void* TunnelNumber);
+    static void CallbackClickBow(Fl_Widget* Widget);
 };
 

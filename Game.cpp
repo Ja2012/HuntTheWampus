@@ -24,6 +24,7 @@ Game::Game()
     GUI->Tunnel1->callback(CallbackClickTunnel, GUI->Tunnel1->TunnelNum);
     GUI->Tunnel2->callback(CallbackClickTunnel, GUI->Tunnel2->TunnelNum);
     GUI->Tunnel3->callback(CallbackClickTunnel, GUI->Tunnel3->TunnelNum);
+    GUI->BowBtn->callback(CallbackClickBow);
 }
 
 void Game::MainLoop()
@@ -162,6 +163,11 @@ void Game::CallbackClickTunnel(Fl_Widget* Widget, void* TunnelNumber)
 {
     std::cout << *static_cast<int*>(TunnelNumber) << '\n';
     GameObj->PlayerMove(*static_cast<int*>(TunnelNumber));
+}
+
+void Game::CallbackClickBow(Fl_Widget* Widget)
+{
+    std::cout << "Fire\n";
 }
 
 

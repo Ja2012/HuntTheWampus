@@ -56,5 +56,12 @@ namespace Consts
 	inline constexpr int ExitBtnPosX{ 1860 };
 	inline constexpr int ExitBtnPosY{ 10 };
 
-	// 
+	// Bow button
+	inline const char* BowImgFileName{ "bow.png" };
+
+	inline constexpr int BowBtnSizeX{ 101 };
+	inline constexpr int BowBtnSizeY{ 450 };
+	inline constexpr int BowBtnPosX{ 560 };
+	inline constexpr int BowBtnPosY{ 590 };
+
 }

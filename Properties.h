@@ -80,9 +80,17 @@ namespace Props
 
 	// Exit button
 	inline int ExitBtnSizeX = Resize(Consts::ExitBtnSizeX);
-	inline int ExitBtnSizeY = Resize(Consts::ExitBtnSizeY);
+	inline int ExitBtnSizeY = Resize(Consts::ExitBtnSizeY, false);
 	inline int ExitBtnPosX = Resize(Consts::ExitBtnPosX);
-	inline int ExitBtnPosY = Resize(Consts::ExitBtnPosY);
+	inline int ExitBtnPosY = Resize(Consts::ExitBtnPosY, false);
+
+	// Bow button
+	inline int BowBtnSizeX = Resize(Consts::BowBtnSizeX);
+	inline int BowBtnSizeY = Resize(Consts::BowBtnSizeY, false);
+	inline int BowBtnPosX = Resize(Consts::BowBtnPosX);
+	inline int BowBtnPosY = Resize(Consts::BowBtnPosY, false);
+
+
 
 };
 
