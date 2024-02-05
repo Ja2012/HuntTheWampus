@@ -18,7 +18,7 @@
 
 Game::Game()
 {
-    GameObj = this;
+    Self = this;
     GUI->callback(CallbackKeyboardHit);
     GUI->QuitBtn->callback(CallbackClickQuit);
     GUI->Tunnel1->callback(CallbackClickTunnel, GUI->Tunnel1->TunnelNum);
@@ -162,12 +162,13 @@ void Game::CallbackClickQuit(Fl_Widget* Widget)
 void Game::CallbackClickTunnel(Fl_Widget* Widget, void* TunnelNumber)
 {
     std::cout << *static_cast<int*>(TunnelNumber) << '\n';
-    GameObj->PlayerMove(*static_cast<int*>(TunnelNumber));
+    Self->PlayGameSound(SoundName::WALK);
+    Self->PlayerMove(*static_cast<int*>(TunnelNumber));
 }
 
 void Game::CallbackClickBow(Fl_Widget* Widget)
 {
-    std::cout << "Fire\n";
+    Self->PlayGameSound(SoundName::BOW_READY);
 }
 
 

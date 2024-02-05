@@ -2,12 +2,14 @@
 
 #include <vector>
 #include <random>
+#include <thread>
 
 #include "Cave.h"
 #include "Unit.h"
 #include "Wampus.h"
 #include "Player.h"
 #include "GameWindow.h"
+#include "SoundPlayer.h"
 
 enum class PlayerAnswer {Move, Shoot, Yes, No};
 
@@ -21,10 +23,15 @@ public:
     void _DebugPrintCavesUnits();
     void PrapareGame();
 
-    static inline Game* GameObj;
+    static inline Game* Self;
 
 private:
     GameWindow* GUI = new GameWindow{};
+
+    // sound
+    std::queue<int>* PlayQueue = new std::queue<int>{};
+    std::thread* SPThread = new std::thread{ SoundPlayer{}, PlayQueue };
+    inline void PlayGameSound(SoundName Sound) { PlayQueue->push((int)Sound); }
 
     // prep & backwork
     void InitRandom();
