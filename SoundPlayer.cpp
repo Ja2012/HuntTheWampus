@@ -24,9 +24,43 @@ void SoundPlayer::operator()(std::queue<int>* PlayQueue)
     {
         if (!PlayQueue->empty())
         {
-            PlaySoundA(Sounds[PlayQueue->front()].Memory, nullptr, SND_MEMORY | SND_ASYNC);
+            if (!*SoundMem1Ptr)
+            {
+                *SoundMem1Ptr = &Sounds[PlayQueue->front()]; 
+            }
+            else if (!*SoundMem2Ptr)
+            {
+                *SoundMem2Ptr = &Sounds[PlayQueue->front()];
+            }
+            else if (!*SoundMem3Ptr)
+            {
+                *SoundMem3Ptr = &Sounds[PlayQueue->front()];
+            }
+            else if (!*SoundMem4Ptr)
+            {
+                *SoundMem4Ptr = &Sounds[PlayQueue->front()];
+            }
+            else
+            {
+                return;
+            }
             PlayQueue->pop();
         }
     };
 
 }
+
+void Play(SoundMem** SoundMemPtr)
+{
+    while (true)
+    {
+        if (*SoundMemPtr)
+        {
+            std::cout << SoundMemPtr << '\n';
+            PlaySoundA((*SoundMemPtr)->Memory, nullptr, SND_MEMORY | SND_ASYNC);
+            //Sleep((*SoundMemPtr)->Duration);
+            std::this_thread::sleep_for(std::chrono::milliseconds((*SoundMemPtr)->Duration));
+            *SoundMemPtr = nullptr;
+        }
+    }
+};
