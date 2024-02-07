@@ -2,7 +2,6 @@
 
 #include <vector>
 #include <random>
-#include <thread>
 
 #include "Cave.h"
 #include "Unit.h"
@@ -29,10 +28,7 @@ private:
     GameWindow* GUI = new GameWindow{};
 
     // sound
-    std::queue<int>* PlayQueue = new std::queue<int>{};
-    std::thread* SPThread = new std::thread{ SoundPlayer{}, PlayQueue };
-    inline void PlayGameSound(SoundName Sound) { PlayQueue->push((int)Sound); }
-
+    SoundPlayer* SP = new SoundPlayer{};
     // prep & backwork
     void InitRandom();
     void LinkCaves();

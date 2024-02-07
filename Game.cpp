@@ -162,13 +162,13 @@ void Game::CallbackClickQuit(Fl_Widget* Widget)
 void Game::CallbackClickTunnel(Fl_Widget* Widget, void* TunnelNumber)
 {
     std::cout << *static_cast<int*>(TunnelNumber) << '\n';
-    Self->PlayGameSound(SoundName::WALK);
+    Self->SP->Play(SoundName::WALK);
     Self->PlayerMove(*static_cast<int*>(TunnelNumber));
 }
 
 void Game::CallbackClickBow(Fl_Widget* Widget)
 {
-    Self->PlayGameSound(SoundName::BOW_READY);
+    Self->SP->Play(SoundName::BOW_READY);
 }
 
 
