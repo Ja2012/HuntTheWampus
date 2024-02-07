@@ -9,20 +9,38 @@ SoundPlayer::SoundPlayer()
 
 SoLoud::handle SoundPlayer::Play(SoundName Name)
 {
-    for (Sound& Sound : Sounds)
+    for (Sound& SoundItem : Sounds)
     {
-        if (Sound.Name == Name)
+        if (SoundItem.Name == Name)
         {
-            return Engine.play(Sound.Obj);
+            SoundItem.Handle = Engine.play(SoundItem.Obj);
+            return SoundItem.Handle;
         }
     }
     return SoLoud::handle();
 }
 
+void SoundPlayer::StopAllExceptBackground()
+{
+    for (Sound& SoundItem : Sounds)
+    {
+        if (SoundItem.Name != SoundName::BACKGROUND)
+        {
+            if (SoundItem.Handle)
+            {
+                Engine.stopAudioSource(SoundItem.Obj);
+            }
+        }
+    }
+
+}
+
 void SoundPlayer::LoadFiles()
 {
-    for (Sound& Sound: Sounds)
+    for (Sound& SoundItem : Sounds)
     {
-        Sound.Obj.load(Sound.FileName);
+        SoundItem.Obj.setLooping(SoundItem.IsLooped);
+        SoundItem.Obj.setVolume(SoundItem.Volume);
+        SoundItem.Obj.load(SoundItem.FileName);
     }
 }

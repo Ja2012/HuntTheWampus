@@ -67,6 +67,7 @@ void Game::MainLoop()
 
 void Game::PrapareGame()
 {
+    SP->Play(SoundName::BACKGROUND);
     InitRandom();
     LinkCaves();
     PlaceUnits();
@@ -156,12 +157,15 @@ void Game::CallbackClickQuit(Fl_Widget* Widget)
     {
         return; // ignore Escape
     }
+    Self->SP->Engine.stopAll();
 	exit(0); 
 }
 
 void Game::CallbackClickTunnel(Fl_Widget* Widget, void* TunnelNumber)
 {
     std::cout << *static_cast<int*>(TunnelNumber) << '\n';
+
+    Self->SP->StopAllExceptBackground();
     Self->SP->Play(SoundName::WALK);
     Self->PlayerMove(*static_cast<int*>(TunnelNumber));
 }
@@ -289,11 +293,11 @@ void Game::PrintInfo()
     Cave* AdjacentCave1 = PlayerPtr->CavePtr->AdjacentCaves[0];
     Cave* AdjacentCave2 = PlayerPtr->CavePtr->AdjacentCaves[1];
     Cave* AdjacentCave3 = PlayerPtr->CavePtr->AdjacentCaves[2];
-    std::wcout << L"Вы в пещере номер " << PlayerPtr->CavePtr->Num
-        << L". Туннели ведут в пещеры номер: "
-        << AdjacentCave1->Num << L", "
-        << AdjacentCave2->Num << L", "
-        << AdjacentCave3->Num << L".\n";
+    //std::wcout << L"Вы в пещере номер " << PlayerPtr->CavePtr->Num
+    //    << L". Туннели ведут в пещеры номер: "
+    //    << AdjacentCave1->Num << L", "
+    //    << AdjacentCave2->Num << L", "
+    //    << AdjacentCave3->Num << L".\n";
 
     std::vector<Cave*> ShuffledCaves {AdjacentCave1, AdjacentCave2, AdjacentCave3};
     std::shuffle(ShuffledCaves.begin(), ShuffledCaves.end(), RandomEngine);
@@ -306,16 +310,18 @@ void Game::PrintInfo()
             {
                 if (static_cast<Wampus*>(UnitPtr)->IsAwake)
                 {
-                    std::wcout << L"Слышно как кто-то топает\n";
+                    //std::wcout << L"Слышно как кто-то топает\n";
                 }
                 else
                 {
-                    std::wcout << L"Слышно как кто-то храпит\n";
+                    SP->Play(SoundName::NEAR_WAMPUS);
+                    //std::wcout << L"Слышно как кто-то храпит\n";
                 }
             }
             else if (typeid(*UnitPtr) == typeid(Bat))
             {
-                std::wcout << L"Слышно хлопот крыльев\n";
+                SP->Play(SoundName::NEAR_BATS);
+                //std::wcout << L"Слышно хлопот крыльев\n";
             }
             else if (typeid(*UnitPtr) == typeid(Pit))
             {
@@ -350,6 +356,9 @@ void Game::PlayerMove(int TunnelNumber)
     GUI->Tunnel3->SetLabel(PlayerPtr->CavePtr->AdjCaveNumbers[2]);
 
     GUI->Map->redraw();
+
+    //ResolveCollision(PlayerPtr->CavePtr);
+
 }
 
 void Game::PlayerShoot()
@@ -536,8 +545,9 @@ void Game::ResolveCollision(Cave* CavePtr)
         return;
     }
 
+    // TODO: collision for arrow
     // arrow in cave
-    if (std::find_if(CavePtr->Units.begin(), CavePtr->Units.end(), [](Unit* UnitPtr) {return typeid(Arrow) == typeid(*UnitPtr); }) != CavePtr->Units.end())
+    if (0 && std::find_if(CavePtr->Units.begin(), CavePtr->Units.end(), [](Unit* UnitPtr) {return typeid(Arrow) == typeid(*UnitPtr); }) != CavePtr->Units.end())
     {
         if (std::find_if(CavePtr->Units.begin(), CavePtr->Units.end(), [this](Unit* UnitPtr) {return WampusPtr == UnitPtr; }) != CavePtr->Units.end())
         {
@@ -559,6 +569,8 @@ void Game::ResolveCollision(Cave* CavePtr)
     {
         if (typeid(*UnitPtr) == typeid(Bat))
         {
+
+
             // lets fly!
             int RandomCaveNum{};
             while (true)
@@ -569,7 +581,7 @@ void Game::ResolveCollision(Cave* CavePtr)
                     break;
                 }
             }            
-            MoveUnit(PlayerPtr, PlayerPtr->CavePtr, Caves[RandomCaveNum]);
+            PlayerMove(RandomCaveNum);
             std::wcout << L"Вы вспугнули летучих мышей. Они схватили вас и перенесли в другую пещеру\n";
             WaitForKey();
             //std::wcout << L"// Крысы бросают игрока в пещеру номер " << RandomCaveNum << L'\n';
