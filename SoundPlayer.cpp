@@ -7,40 +7,53 @@ SoundPlayer::SoundPlayer()
     LoadFiles();
 }
 
-SoLoud::handle SoundPlayer::Play(SoundName Name)
+SoLoud::handle SoundPlayer::Play(SoundName Name, bool Paused)
 {
-    for (Sound& SoundItem : Sounds)
-    {
-        if (SoundItem.Name == Name)
-        {
-            SoundItem.Handle = Engine.play(SoundItem.Obj);
-            return SoundItem.Handle;
-        }
-    }
-    return SoLoud::handle();
+    Sound* Item = GetSound(Name);
+    Item->Handle = Engine.play(Item->Obj, -1, 0, Paused);
+    return Item->Handle;
 }
 
 void SoundPlayer::StopAllExceptBackground()
 {
-    for (Sound& SoundItem : Sounds)
+    for (Sound& Item : Sounds)
     {
-        if (SoundItem.Name != SoundName::BACKGROUND)
+        if (Item.Name != SoundName::BACKGROUND)
         {
-            if (SoundItem.Handle)
-            {
-                Engine.stopAudioSource(SoundItem.Obj);
-            }
+            Engine.stopAudioSource(Item.Obj);
         }
     }
 
 }
 
+Sound* SoundPlayer::GetSound(SoundName Name)
+{
+    for (Sound& Item : Sounds)
+    {
+        if (Item.Name == Name)
+        {
+            return &Item;
+        }
+    }
+}
+
+SoLoud::handle SoundPlayer::PlayFadeIn(SoundName Name, float Seconds)
+{
+    SoLoud::handle Handle;
+    Sound* Item = GetSound(Name);
+    Handle = Engine.play(Item->Obj, 0, 0, true);
+    Engine.fadeVolume(Handle, Item->Volume, Seconds);
+    Engine.setPause(Handle, false);
+    return Handle;
+}
+
 void SoundPlayer::LoadFiles()
 {
-    for (Sound& SoundItem : Sounds)
+    for (Sound& Item : Sounds)
     {
-        SoundItem.Obj.setLooping(SoundItem.IsLooped);
-        SoundItem.Obj.setVolume(SoundItem.Volume);
-        SoundItem.Obj.load(SoundItem.FileName);
+        Item.Obj.setLooping(Item.IsLooped);
+        Item.Obj.setVolume(Item.Volume);
+
+        Item.Obj.load(Item.FileName);
     }
 }

@@ -34,7 +34,7 @@ void Game::MainLoop()
     {
         std::wcout << L"\n-------- Ход " << TurnNumber << " --------\n";
         //_DebugPrintCavesUnits();
-        PrintInfo();
+        PlayerListen();
 
         PlayerAnswer PlayerDesicion = AskWhatPlayerWantToDo();
         if (PlayerDesicion == PlayerAnswer::Move)
@@ -157,7 +157,6 @@ void Game::CallbackClickQuit(Fl_Widget* Widget)
     {
         return; // ignore Escape
     }
-    Self->SP->Engine.stopAll();
 	exit(0); 
 }
 
@@ -288,7 +287,7 @@ void Game::DestroyUnit(Unit* TargetUnitPtr)
 }
 
 
-void Game::PrintInfo()
+void Game::PlayerListen()
 {
     Cave* AdjacentCave1 = PlayerPtr->CavePtr->AdjacentCaves[0];
     Cave* AdjacentCave2 = PlayerPtr->CavePtr->AdjacentCaves[1];
@@ -302,6 +301,7 @@ void Game::PrintInfo()
     std::vector<Cave*> ShuffledCaves {AdjacentCave1, AdjacentCave2, AdjacentCave3};
     std::shuffle(ShuffledCaves.begin(), ShuffledCaves.end(), RandomEngine);
 
+    SoLoud::handle SoundHandle;
     for (Cave* CavePtr : ShuffledCaves)
     {
         for (Unit* UnitPtr : CavePtr->Units)
@@ -310,22 +310,25 @@ void Game::PrintInfo()
             {
                 if (static_cast<Wampus*>(UnitPtr)->IsAwake)
                 {
+                    SoundHandle = SP->PlayFadeIn(SoundName::NEAR_WAMPUS_AWAKE, 4);
+
                     //std::wcout << L"Слышно как кто-то топает\n";
                 }
                 else
                 {
-                    SP->Play(SoundName::NEAR_WAMPUS);
+                    SoundHandle = SP->PlayFadeIn(SoundName::NEAR_WAMPUS_SLEEP, 4);
                     //std::wcout << L"Слышно как кто-то храпит\n";
                 }
             }
             else if (typeid(*UnitPtr) == typeid(Bat))
             {
-                SP->Play(SoundName::NEAR_BATS);
+                SoundHandle = SP->PlayFadeIn(SoundName::NEAR_BATS, 4);
                 //std::wcout << L"Слышно хлопот крыльев\n";
             }
             else if (typeid(*UnitPtr) == typeid(Pit))
             {
-                std::wcout << L"Слышно завывание ветра\n";
+                SoundHandle = SP->PlayFadeIn(SoundName::NEAR_PIT, 4);
+                //std::wcout << L"Слышно завывание ветра\n";
             }
         }
     }
@@ -341,6 +344,7 @@ inline bool IsNumber(const std::wstring& Str)
 
 void Game::PlayerMove(int TunnelNumber)
 {
+    Sleep(800);
     GUI->Map->UnsetPlayerCaveMark(PlayerPtr->CavePtr->Num);
     MoveUnit(PlayerPtr, PlayerPtr->CavePtr, Caves[TunnelNumber]);
     GUI->Map->SetPlayerCaveMark(TunnelNumber);
@@ -356,6 +360,7 @@ void Game::PlayerMove(int TunnelNumber)
     GUI->Tunnel3->SetLabel(PlayerPtr->CavePtr->AdjCaveNumbers[2]);
 
     GUI->Map->redraw();
+    PlayerListen();
 
     //ResolveCollision(PlayerPtr->CavePtr);
 

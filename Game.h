@@ -45,7 +45,7 @@ private:
     void ResolveCollision(Cave* CavePtr);
     void PlayerMove(int TunnelNumber);
     void PlayerShoot();
-    void PrintInfo();
+    void PlayerListen();
     void MoveUnit(Unit* TargetUnit, Cave* FromCave, Cave* ToCave);
     void EndGame(bool IsWin);
     void WaitForKey();
