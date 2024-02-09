@@ -6,6 +6,11 @@ GameWindow::GameWindow(int Width, int Height, const char* Label) : Fl_Double_Win
 	size(Props::ScrRes.X, Props::ScrRes.Y);
 	fullscreen();
 
+	QuitBtn->labelcolor(FL_WHITE);
+	QuitBtn->box(FL_NO_BOX);
+
+	ShootDiag = new ShootDialog{};
+
 	end();
 	show();
 };

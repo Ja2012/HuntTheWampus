@@ -4,9 +4,6 @@
 * terms of the Do What The Fuck You Want To Public License, Version 2,
 * as published by Sam Hocevar. See the COPYING file for more details.
 */
-
-// FLTK manual https://www.fltk.org/doc-1.3/basics.html
-
 #include <iostream>
 
 #include "FLTK.h"
@@ -17,6 +14,7 @@
 int main() 
 {
 	fl_register_images();
+	Fl::visual(FL_DOUBLE | FL_INDEX);
 
 	Game GameObj{};
 

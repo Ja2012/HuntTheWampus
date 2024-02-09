@@ -25,7 +25,9 @@ public:
     static inline Game* Self;
 
 private:
+    // graphical user interface
     GameWindow* GUI = new GameWindow{};
+    bool IsDialogOpen();
 
     // sound
     SoundPlayer* SP = new SoundPlayer{};

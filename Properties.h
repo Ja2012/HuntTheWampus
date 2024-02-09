@@ -90,6 +90,43 @@ namespace Props
 	inline int BowBtnPosX = Resize(Consts::BowBtnPosX);
 	inline int BowBtnPosY = Resize(Consts::BowBtnPosY, false);
 
+	// Shoot Dialog -----------------------------------------------------------
+	inline int SDSizeX = Resize(Consts::SDSizeX);
+	inline int SDSizeY = Resize(Consts::SDSizeY, false);
+	inline int SDPosX = Resize(Consts::SDPosX);
+	inline int SDPosY = Resize(Consts::SDPosY, false);
+
+	//		output field
+	inline  int SDPathOutputSizeX = Resize(Consts::SDPathOutputSizeX);
+	inline  int SDPathOutputSizeY = Resize(Consts::SDPathOutputSizeY, false);
+	inline  int SDPathOutputPosX = Resize(Consts::SDPathOutputPosX);
+	inline  int SDPathOutputPosY = Resize(Consts::SDPathOutputPosY, false);
+
+	//		erase button
+	inline  int SDEraseBtnSizeX = Resize(Consts::SDEraseBtnSizeX);
+	inline  int SDEraselBtnSizeY = Resize(Consts::SDEraselBtnSizeY, false);
+	inline  int SDEraselBtnPosX = Resize(Consts::SDEraselBtnPosX);
+	inline  int SDEraselBtnPosY = Resize(Consts::SDEraselBtnPosY, false);
+	
+	//		cancel button
+	inline  int SDCancelBtnSizeX = Resize(Consts::SDCancelBtnSizeX);
+	inline  int SDCancelBtnSizeY = Resize(Consts::SDCancelBtnSizeY, false);
+	inline  int SDCancelBtnPosX = Resize(Consts::SDCancelBtnPosX);
+	inline  int SDCancelBtnPosY = Resize(Consts::SDCancelBtnPosY, false);
+
+	//		first cave button
+	inline  int SDCaveBtnSizeX = Resize(Consts::SDCaveBtnSizeX);
+	inline  int SDCaveBtnSizeY = Resize(Consts::SDCaveBtnSizeY, false);
+	inline  int SDCaveBtnPosX = Resize(Consts::SDCaveBtnPosX);
+	inline  int SDCaveBtnPosY = Resize(Consts::SDCaveBtnPosY, false);
+
+	//		fire button
+	inline  int SDFireBtnSizeX = Resize(Consts::SDFireBtnSizeX);
+	inline  int SDFireBtnSizeY = Resize(Consts::SDFireBtnSizeY, false);;
+	inline  int SDFireBtnPosX = Resize(Consts::SDFireBtnPosX);
+	inline  int SDFireBtntPosY = Resize(Consts::SDFireBtntPosY, false);;
+	// END Shoot Dialog Properties ---------------------------------------------
+
 
 
 };

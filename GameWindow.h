@@ -8,6 +8,7 @@
 #include "TunnelWidget.h"
 #include "ArrowWidget.h"
 #include "BowWidget.h"
+#include "ShootDialog.h"
 
 class GameWindow : public Fl_Double_Window
 {
@@ -31,5 +32,7 @@ public:
 	Fl_PNG_Image* BowImg = static_cast<Fl_PNG_Image*>(Fl_PNG_Image(Consts::BowImgFileName).copy(Props::BowBtnSizeX, Props::BowBtnSizeY));
 	BowWidget* BowBtn = new BowWidget(BowImg);
 
-	Fl_Button* QuitBtn = new Fl_Button(Props::ExitBtnPosX, Props::ExitBtnPosY, Props::ExitBtnSizeX, Props::ExitBtnSizeY, "@+51+");
+	ShootDialog* ShootDiag;
+
+	Fl_Button* QuitBtn = new Fl_Button(Props::ExitBtnPosX, Props::ExitBtnPosY, Props::ExitBtnSizeX, Props::ExitBtnSizeY, "@+81+");
 };

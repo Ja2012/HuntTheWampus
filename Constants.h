@@ -1,10 +1,11 @@
 #pragma once
 
+// Default resolution 1920x1080. 
+// Means game mainly for 16:9 aspect ratio, otherwize (16:10, 21:9) will be kind of creepy after rescale.
+// So TODO: make work for different aspect ratios 
+
 namespace Consts
 {
-	// Default resolution 1920x1080. 
-	// Means game mainly for 16:9 aspect ratio, otherwize (16:10, 21:9) will be kind of creepy after rescale.
-	// So TODO: make work for different aspect ratios 
 	inline constexpr int ScrX{ 1920 };
 	inline constexpr int ScrY{ 1080 };	
 
@@ -63,5 +64,38 @@ namespace Consts
 	inline constexpr int BowBtnSizeY{ 450 };
 	inline constexpr int BowBtnPosX{ 560 };
 	inline constexpr int BowBtnPosY{ 590 };
+
+	// Shoot Dialog -----------------------------------------------------------
+	inline constexpr int SDSizeX{ 550 };
+	inline constexpr int SDSizeY{ 600 };
+	inline constexpr int SDPosX{ 1290 };
+	inline constexpr int SDPosY{ 530 };
+
+	inline constexpr int SDPathOutputSizeX{ 350 };
+	inline constexpr int SDPathOutputSizeY{ 50 };
+	inline constexpr int SDPathOutputPosX{ 1340 };
+	inline constexpr int SDPathOutputPosY{ 570 };
+
+	inline constexpr int SDEraseBtnSizeX{ 50 };
+	inline constexpr int SDEraselBtnSizeY{ 50 };
+	inline constexpr int SDEraselBtnPosX{ 1290 };
+	inline constexpr int SDEraselBtnPosY{ 570 };
+
+	inline constexpr int SDCancelBtnSizeX{ 50 };
+	inline constexpr int SDCancelBtnSizeY{ 50 };
+	inline constexpr int SDCancelBtnPosX{ 1780 };
+	inline constexpr int SDCancelBtnPosY{ 540 };
+
+	inline constexpr int SDCaveBtnSizeX{ 50 };
+	inline constexpr int SDCaveBtnSizeY{ 50 };
+	inline constexpr int SDCaveBtnPosX{ 1340 };
+	inline constexpr int SDCaveBtnPosY{ 650 };
+
+	inline constexpr int SDFireBtnSizeX{ 205 };
+	inline constexpr int SDFireBtnSizeY{ 50 };
+	inline constexpr int SDFireBtnPosX{ 1462 };
+	inline constexpr int SDFireBtntPosY{ 1009};
+
+	// END Shoot Dialog Constants ---------------------------------------------
 
 }

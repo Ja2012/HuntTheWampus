@@ -162,7 +162,8 @@ void Game::CallbackClickQuit(Fl_Widget* Widget)
 
 void Game::CallbackClickTunnel(Fl_Widget* Widget, void* TunnelNumber)
 {
-    std::cout << *static_cast<int*>(TunnelNumber) << '\n';
+    if (Self->IsDialogOpen()) return;
+    //std::cout << *static_cast<int*>(TunnelNumber) << '\n';
 
     Self->SP->StopAllExceptBackground();
     Self->SP->Play(SoundName::WALK);
@@ -171,7 +172,9 @@ void Game::CallbackClickTunnel(Fl_Widget* Widget, void* TunnelNumber)
 
 void Game::CallbackClickBow(Fl_Widget* Widget)
 {
+    if (Self->IsDialogOpen()) return;
     Self->SP->Play(SoundName::BOW_READY);
+    Self->GUI->ShootDiag->show();
 }
 
 
@@ -633,6 +636,10 @@ void Game::ResolveCollision(Cave* CavePtr)
 
 }
 
+bool Game::IsDialogOpen()
+{
+    return bool(GUI->ShootDiag->visible());
+}
 
 void Game::InitRandom()
 {
