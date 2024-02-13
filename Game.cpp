@@ -19,11 +19,20 @@
 Game::Game()
 {
     Self = this;
+
+    // SetUp callbacks
     GUI->callback(CallbackKeyboardHit);
     GUI->QuitBtn->callback(CallbackClickQuit);
+
     GUI->Tunnel1->callback(CallbackClickTunnel, GUI->Tunnel1->TunnelNum);
     GUI->Tunnel2->callback(CallbackClickTunnel, GUI->Tunnel2->TunnelNum);
     GUI->Tunnel3->callback(CallbackClickTunnel, GUI->Tunnel3->TunnelNum);
+
+    GUI->ShootDiag->EraseBtn->callback(CallbackClickSDErase);
+    for (CaveNumberWidget* Widget : GUI->ShootDiag->CaveNumberButtons)
+    {
+        Widget->callback(CallbackClickSDCaveNumberButton);
+    }
     //GUI->BowBtn->callback(CallbackClickBow);
 }
 
@@ -172,6 +181,50 @@ void Game::CallbackClickTunnel(Fl_Widget* Widget, void* TunnelNumber)
 
 void Game::CallbackClickBow(Fl_Widget* Widget)
 {
+}
+
+void Game::CallbackClickSDErase(Fl_Widget* Widget)
+{
+    Self->GUI->ShootDiag->PathOut->EraseLast();
+
+    // redraw available numbers for shoot
+    CaveWidget* CaveW = Self->GUI->Map->CaveWidgets[Self->GUI->ShootDiag->PathOut->CaveNumbersInPath.];
+    if (CaveW->VisibleTunnels)
+    {
+        Self->Caves[CaveNumW->Number]->AdjCaveNumbers;
+
+        Self->GUI->ShootDiag->ShowCaveNumbers(
+            {
+                Self->Caves[CaveNumW->Number]->AdjCaveNumbers[0],
+                Self->Caves[CaveNumW->Number]->AdjCaveNumbers[1],
+                Self->Caves[CaveNumW->Number]->AdjCaveNumbers[2]
+            }
+        );
+    }
+}
+
+void Game::CallbackClickSDCaveNumberButton(Fl_Widget* Widget)
+{
+    CaveNumberWidget* CaveNumW = static_cast<CaveNumberWidget*>(Widget);
+
+    // update outout path
+    Self->GUI->ShootDiag->PathOut->Add(CaveNumW->Number);
+
+    // redraw available numbers for shoot
+    CaveWidget* CaveW = Self->GUI->Map->CaveWidgets[CaveNumW->Number];
+    if (CaveW->VisibleTunnels)
+    {
+        Self->Caves[CaveNumW->Number]->AdjCaveNumbers;
+
+        Self->GUI->ShootDiag->ShowCaveNumbers(
+            {
+                Self->Caves[CaveNumW->Number]->AdjCaveNumbers[0],
+                Self->Caves[CaveNumW->Number]->AdjCaveNumbers[1],
+                Self->Caves[CaveNumW->Number]->AdjCaveNumbers[2]
+            }
+        );
+    }
+
 }
 
 
@@ -360,6 +413,15 @@ void Game::PlayerMove(int TunnelNumber)
     GUI->Tunnel3->SetLabel(PlayerPtr->CavePtr->AdjCaveNumbers[2]);
 
     GUI->Map->redraw();
+
+    GUI->ShootDiag->PathOut->Clear();
+    GUI->ShootDiag->ShowCaveNumbers(
+        {
+            PlayerPtr->CavePtr->AdjCaveNumbers[0],
+            PlayerPtr->CavePtr->AdjCaveNumbers[1],
+            PlayerPtr->CavePtr->AdjCaveNumbers[2]
+        }
+    );
     PlayerListen();
 
     //ResolveCollision(PlayerPtr->CavePtr);
@@ -635,7 +697,8 @@ void Game::ResolveCollision(Cave* CavePtr)
 
 bool Game::IsDialogOpen()
 {
-    return bool(GUI->ShootDiag->visible());
+    return false;
+    //return bool(GUI->ShootDiag->visible());
 }
 
 void Game::InitRandom()

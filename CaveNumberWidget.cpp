@@ -8,5 +8,5 @@ CaveNumberWidget::CaveNumberWidget(int Number, int X, int Y, int W, int H) :
 	//box(FL_BORDER_FRAME);
 	labelsize(h() / 1.5);
 	labelfont(FL_TIMES_BOLD_ITALIC);
-	show();
+	hide();
 }

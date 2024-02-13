@@ -21,6 +21,7 @@ public:
 	Fl_PNG_Image* BowImg = static_cast<Fl_PNG_Image*>(Fl_PNG_Image(Consts::BowImgFileName).copy(Props::BowBtnSizeX, Props::BowBtnSizeY));
 	BowWidget* BowBtn = new BowWidget(BowImg);
 
+	void ShowCaveNumbers(std::vector<int>);
 	std::vector<int> GetSelectedCaves();
 
 };

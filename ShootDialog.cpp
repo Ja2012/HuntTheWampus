@@ -41,3 +41,18 @@ ShootDialog::ShootDialog(int Width, int Height) : Fl_Group(Props::SDPosX, Props:
 	}
 	end();
 }
+
+void ShootDialog::ShowCaveNumbers(std::vector<int> Numbers)
+{
+	for (CaveNumberWidget* Widget : CaveNumberButtons)
+	{
+		if (std::find(Numbers.begin(), Numbers.end(), Widget->Number) != Numbers.end())
+		{
+			Widget->show();
+		}
+		else
+		{
+			Widget->hide();
+		}
+	}
+}

@@ -70,5 +70,7 @@ private:
     static void CallbackClickQuit(Fl_Widget* Widget);
     static void CallbackClickTunnel(Fl_Widget* Widget, void* TunnelNumber);
     static void CallbackClickBow(Fl_Widget* Widget);
+    static void CallbackClickSDErase(Fl_Widget* Widget);
+    static void CallbackClickSDCaveNumberButton(Fl_Widget* Widget);
 };
 
