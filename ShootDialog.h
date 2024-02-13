@@ -5,13 +5,13 @@
 #include "FLTK.h"
 #include "Properties.h"
 #include "BowWidget.h"
+#include "OutputField.h"
 class ShootDialog : public Fl_Group
 {
 public:
 	ShootDialog(int Width = Props::SDSizeX, int Height = Props::SDSizeY);
 
-	Fl_Text_Buffer* PathOutBuffer = new Fl_Text_Buffer();
-	Fl_Text_Display* PathOut;
+	OutputField* PathOut;
 
 	Fl_Button* EraseBtn;
 	Fl_Button* CaveBtn[20];
