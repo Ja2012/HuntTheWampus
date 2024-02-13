@@ -57,14 +57,6 @@ namespace Consts
 	inline constexpr int ExitBtnPosX{ 1860 };
 	inline constexpr int ExitBtnPosY{ 10 };
 
-	// Bow button
-	inline const char* BowImgFileName{ "bow.png" };
-
-	inline constexpr int BowBtnSizeX{ 101 };
-	inline constexpr int BowBtnSizeY{ 450 };
-	inline constexpr int BowBtnPosX{ 560 };
-	inline constexpr int BowBtnPosY{ 590 };
-
 	// Shoot Dialog -----------------------------------------------------------
 	inline constexpr int SDSizeX{ 550 };
 	inline constexpr int SDSizeY{ 600 };
@@ -73,29 +65,25 @@ namespace Consts
 
 	inline constexpr int SDPathOutputSizeX{ 350 };
 	inline constexpr int SDPathOutputSizeY{ 50 };
-	inline constexpr int SDPathOutputPosX{ 1340 };
-	inline constexpr int SDPathOutputPosY{ 570 };
+	inline constexpr int SDPathOutputPosX{ 1410 };
+	inline constexpr int SDPathOutputPosY{ 543 };
 
 	inline constexpr int SDEraseBtnSizeX{ 50 };
 	inline constexpr int SDEraselBtnSizeY{ 50 };
-	inline constexpr int SDEraselBtnPosX{ 1290 };
-	inline constexpr int SDEraselBtnPosY{ 570 };
+	inline constexpr int SDEraselBtnPosX{ 1360 };
+	inline constexpr int SDEraselBtnPosY{ 543 };
 
-	inline constexpr int SDCancelBtnSizeX{ 50 };
-	inline constexpr int SDCancelBtnSizeY{ 50 };
-	inline constexpr int SDCancelBtnPosX{ 1780 };
-	inline constexpr int SDCancelBtnPosY{ 540 };
+	inline constexpr int SDCaveBtnSizeX{ 57 };
+	inline constexpr int SDCaveBtnSizeY{ 57 };
+	inline constexpr int SDCaveBtnPosX{ 1330 };
+	inline constexpr int SDCaveBtnPosY{ 610 };
 
-	inline constexpr int SDCaveBtnSizeX{ 50 };
-	inline constexpr int SDCaveBtnSizeY{ 50 };
-	inline constexpr int SDCaveBtnPosX{ 1340 };
-	inline constexpr int SDCaveBtnPosY{ 650 };
-
-	inline constexpr int SDFireBtnSizeX{ 205 };
-	inline constexpr int SDFireBtnSizeY{ 50 };
-	inline constexpr int SDFireBtnPosX{ 1462 };
-	inline constexpr int SDFireBtntPosY{ 1009};
-
+	//		Bow button
+	inline const char* BowImgFileName{ "bow.png" };
+	inline constexpr int BowBtnSizeX{ 320 };
+	inline constexpr int BowBtnSizeY{ 75 };
+	inline constexpr int BowBtnPosX{ 1405 };
+	inline constexpr int BowBtnPosY{ 990 };
 	// END Shoot Dialog Constants ---------------------------------------------
 
 }

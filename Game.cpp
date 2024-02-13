@@ -24,7 +24,7 @@ Game::Game()
     GUI->Tunnel1->callback(CallbackClickTunnel, GUI->Tunnel1->TunnelNum);
     GUI->Tunnel2->callback(CallbackClickTunnel, GUI->Tunnel2->TunnelNum);
     GUI->Tunnel3->callback(CallbackClickTunnel, GUI->Tunnel3->TunnelNum);
-    GUI->BowBtn->callback(CallbackClickBow);
+    //GUI->BowBtn->callback(CallbackClickBow);
 }
 
 void Game::MainLoop()
@@ -172,9 +172,6 @@ void Game::CallbackClickTunnel(Fl_Widget* Widget, void* TunnelNumber)
 
 void Game::CallbackClickBow(Fl_Widget* Widget)
 {
-    if (Self->IsDialogOpen()) return;
-    Self->SP->Play(SoundName::BOW_READY);
-    Self->GUI->ShootDiag->show();
 }
 
 

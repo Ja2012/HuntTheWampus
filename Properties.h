@@ -108,23 +108,12 @@ namespace Props
 	inline  int SDEraselBtnPosX = Resize(Consts::SDEraselBtnPosX);
 	inline  int SDEraselBtnPosY = Resize(Consts::SDEraselBtnPosY, false);
 	
-	//		cancel button
-	inline  int SDCancelBtnSizeX = Resize(Consts::SDCancelBtnSizeX);
-	inline  int SDCancelBtnSizeY = Resize(Consts::SDCancelBtnSizeY, false);
-	inline  int SDCancelBtnPosX = Resize(Consts::SDCancelBtnPosX);
-	inline  int SDCancelBtnPosY = Resize(Consts::SDCancelBtnPosY, false);
-
 	//		first cave button
 	inline  int SDCaveBtnSizeX = Resize(Consts::SDCaveBtnSizeX);
 	inline  int SDCaveBtnSizeY = Resize(Consts::SDCaveBtnSizeY, false);
 	inline  int SDCaveBtnPosX = Resize(Consts::SDCaveBtnPosX);
 	inline  int SDCaveBtnPosY = Resize(Consts::SDCaveBtnPosY, false);
 
-	//		fire button
-	inline  int SDFireBtnSizeX = Resize(Consts::SDFireBtnSizeX);
-	inline  int SDFireBtnSizeY = Resize(Consts::SDFireBtnSizeY, false);;
-	inline  int SDFireBtnPosX = Resize(Consts::SDFireBtnPosX);
-	inline  int SDFireBtntPosY = Resize(Consts::SDFireBtntPosY, false);;
 	// END Shoot Dialog Properties ---------------------------------------------
 
 
