@@ -63,20 +63,23 @@ namespace Consts
 	inline constexpr int SDPosX{ 1290 };
 	inline constexpr int SDPosY{ 530 };
 
-	inline constexpr int SDPathOutputSizeX{ 350 };
-	inline constexpr int SDPathOutputSizeY{ 50 };
-	inline constexpr int SDPathOutputPosX{ 1410 };
-	inline constexpr int SDPathOutputPosY{ 543 };
+	inline constexpr int SDPathOutputSizeX{ 355 };
+	inline constexpr int SDPathOutputSizeY{ 61 };
+	inline constexpr int SDPathOutputPosX{ 1425 };
+	inline constexpr int SDPathOutputPosY{ 920 };
 
-	inline constexpr int SDEraseBtnSizeX{ 50 };
-	inline constexpr int SDEraselBtnSizeY{ 50 };
-	inline constexpr int SDEraselBtnPosX{ 1360 };
-	inline constexpr int SDEraselBtnPosY{ 543 };
+	inline constexpr int SDEraseBtnSizeX{ 55  };
+	inline constexpr int SDEraselBtnSizeY{ 55 };
+	inline constexpr int SDEraselBtnPosX{ 1370 };
+	inline constexpr int SDEraselBtnPosY{ 916 };
 
 	inline constexpr int SDCaveBtnSizeX{ 57 };
 	inline constexpr int SDCaveBtnSizeY{ 57 };
-	inline constexpr int SDCaveBtnPosX{ 1330 };
-	inline constexpr int SDCaveBtnPosY{ 610 };
+	inline constexpr int SDCaveBtnPosX{ 1360 };
+	inline constexpr int SDCaveBtnPosY{ 580 };
+
+	inline constexpr int SDCaveLastBtnPosX{ 1727};
+	inline constexpr int SDCaveLastBtnPosY{ 845 };
 
 	//		Bow button
 	inline const char* BowImgFileName{ "bow.png" };

@@ -113,6 +113,9 @@ namespace Props
 	inline  int SDCaveBtnSizeY = Resize(Consts::SDCaveBtnSizeY, false);
 	inline  int SDCaveBtnPosX = Resize(Consts::SDCaveBtnPosX);
 	inline  int SDCaveBtnPosY = Resize(Consts::SDCaveBtnPosY, false);
+	//		last cave button
+	inline  int SDCaveLastBtnPosX = Resize(Consts::SDCaveLastBtnPosX);
+	inline  int SDCaveLastBtnPosY = Resize(Consts::SDCaveLastBtnPosY, false);
 
 	// END Shoot Dialog Properties ---------------------------------------------
 

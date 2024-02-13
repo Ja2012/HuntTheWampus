@@ -53,6 +53,9 @@
     <ClCompile Include="OutputField.cpp">
       <Filter>Source Files\Widgets</Filter>
     </ClCompile>
+    <ClCompile Include="CaveNumberWidget.cpp">
+      <Filter>Source Files\Widgets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameWindow.h">
@@ -119,6 +122,9 @@
       <Filter>Header Files\Widgets</Filter>
     </ClInclude>
     <ClInclude Include="OutputField.h">
+      <Filter>Header Files\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="CaveNumberWidget.h">
       <Filter>Header Files\Widgets</Filter>
     </ClInclude>
   </ItemGroup>

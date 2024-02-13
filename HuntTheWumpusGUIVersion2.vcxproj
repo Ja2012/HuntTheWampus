@@ -138,6 +138,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BowWidget.cpp" />
+    <ClCompile Include="CaveNumberWidget.cpp" />
     <ClCompile Include="CaveWidget.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameWindow.cpp" />
@@ -155,6 +156,7 @@
     <ClInclude Include="Bat.h" />
     <ClInclude Include="BowWidget.h" />
     <ClInclude Include="Cave.h" />
+    <ClInclude Include="CaveNumberWidget.h" />
     <ClInclude Include="CaveWidget.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="FLTK.h" />
