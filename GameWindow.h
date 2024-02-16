@@ -25,6 +25,8 @@ public:
 	ArrowWidget* Arrow3 = new ArrowWidget{ ArrowImg, Props::ArrowImgPosX, Props::ArrowImgPosY + 2 * Props::ArrowsYDistance};
 	ArrowWidget* Arrow4 = new ArrowWidget{ ArrowImg, Props::ArrowImgPosX, Props::ArrowImgPosY + 3 * Props::ArrowsYDistance};
 	ArrowWidget* Arrow5 = new ArrowWidget{ ArrowImg, Props::ArrowImgPosX, Props::ArrowImgPosY + 4 * Props::ArrowsYDistance};
+	ArrowWidget* Arrows[5]{ Arrow1, Arrow2, Arrow3, Arrow4, Arrow5 };
+	void HideOneArrow();
 
 	Fl_PNG_Image* MapImg = static_cast<Fl_PNG_Image*>(Fl_PNG_Image(Consts::MapImageFileName).copy(Props::MapImgSize.X, Props::MapImgSize.Y));
 	MapWidget* Map = new MapWidget(MapImg);

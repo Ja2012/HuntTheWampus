@@ -33,7 +33,7 @@ Game::Game()
     {
         Widget->callback(CallbackClickSDCaveNumberButton);
     }
-    //GUI->BowBtn->callback(CallbackClickBow);
+    GUI->ShootDiag->BowBtn->callback(CallbackClickBow);
 }
 
 void Game::MainLoop()
@@ -129,7 +129,7 @@ void Game::EndGame(bool IsWin)
     {
         std::wcout << L"\n\n\n********\nВы прошли игру! Поздравляем!\n********\n\n\n";
     } 
-    WaitForKey();
+    //WaitForKey();
     exit(0);
 
     //std::wcout << L"Попробовать ещё раз?\n";
@@ -181,18 +181,74 @@ void Game::CallbackClickTunnel(Fl_Widget* Widget, void* TunnelNumber)
 
 void Game::CallbackClickBow(Fl_Widget* Widget)
 {
+    Self->PlayerShoot();
 }
 
 void Game::CallbackClickSDErase(Fl_Widget* Widget)
 {
     Self->GUI->ShootDiag->PathOut->EraseLast();
+    int CaveNum{0};
+    if (Self->GUI->ShootDiag->PathOut->CaveNumbersInPath.empty())
+    {
+        CaveNum = Self->PlayerPtr->CavePtr->Num;
+    }
+    else
+    {
+        CaveNum = Self->GUI->ShootDiag->PathOut->CaveNumbersInPath.back();
+    }
 
     // redraw available numbers for shoot
-    CaveWidget* CaveW = Self->GUI->Map->CaveWidgets[Self->GUI->ShootDiag->PathOut->CaveNumbersInPath.];
+    CaveWidget* CaveW = Self->GUI->Map->CaveWidgets[CaveNum];
     if (CaveW->VisibleTunnels)
     {
-        Self->Caves[CaveNumW->Number]->AdjCaveNumbers;
+        Self->GUI->ShootDiag->ShowCaveNumbers(
+            {
+                Self->Caves[CaveNum]->AdjCaveNumbers[0],
+                Self->Caves[CaveNum]->AdjCaveNumbers[1],
+                Self->Caves[CaveNum]->AdjCaveNumbers[2]
+            }
+        );
+    }
+    else
+    {
+        Self->GUI->ShootDiag->ShowAllExceptCaveNumbers(
+            {
+                CaveNum
+            }
+        );
 
+    }
+}
+
+void Game::CallbackClickSDCaveNumberButton(Fl_Widget* Widget)
+{
+    if (Self->GUI->ShootDiag->PathOut->CaveNumbersInPath.size() == 5)
+    {
+        return; // just in case situation. There should be no such situation.
+    }
+
+    if (Self->GUI->ShootDiag->PathOut->CaveNumbersInPath.empty())
+    {
+        Self->SP->Play(SoundName::BOW_READY);
+
+    }
+       
+    CaveNumberWidget* CaveNumW = static_cast<CaveNumberWidget*>(Widget);
+
+    // update outout path
+    Self->GUI->ShootDiag->PathOut->Add(CaveNumW->Number);
+
+    // hide if max path (5)
+    if (Self->GUI->ShootDiag->PathOut->CaveNumbersInPath.size() == 5)
+    {
+        Self->GUI->ShootDiag->HideCaveNumbers();
+        return;
+    }
+
+    // redraw available numbers for shoot
+    CaveWidget* CaveW = Self->GUI->Map->CaveWidgets[CaveNumW->Number];
+    if (CaveW->VisibleTunnels)
+    {
         Self->GUI->ShootDiag->ShowCaveNumbers(
             {
                 Self->Caves[CaveNumW->Number]->AdjCaveNumbers[0],
@@ -201,28 +257,14 @@ void Game::CallbackClickSDErase(Fl_Widget* Widget)
             }
         );
     }
-}
-
-void Game::CallbackClickSDCaveNumberButton(Fl_Widget* Widget)
-{
-    CaveNumberWidget* CaveNumW = static_cast<CaveNumberWidget*>(Widget);
-
-    // update outout path
-    Self->GUI->ShootDiag->PathOut->Add(CaveNumW->Number);
-
-    // redraw available numbers for shoot
-    CaveWidget* CaveW = Self->GUI->Map->CaveWidgets[CaveNumW->Number];
-    if (CaveW->VisibleTunnels)
+    else
     {
-        Self->Caves[CaveNumW->Number]->AdjCaveNumbers;
-
-        Self->GUI->ShootDiag->ShowCaveNumbers(
+        Self->GUI->ShootDiag->ShowAllExceptCaveNumbers(
             {
-                Self->Caves[CaveNumW->Number]->AdjCaveNumbers[0],
-                Self->Caves[CaveNumW->Number]->AdjCaveNumbers[1],
-                Self->Caves[CaveNumW->Number]->AdjCaveNumbers[2]
+                CaveNumW->Number
             }
         );
+
     }
 
 }
@@ -430,89 +472,37 @@ void Game::PlayerMove(int TunnelNumber)
 
 void Game::PlayerShoot()
 {
-    Cave* AdjacentCave1 = PlayerPtr->CavePtr->AdjacentCaves[0];
-    Cave* AdjacentCave2 = PlayerPtr->CavePtr->AdjacentCaves[1];
-    Cave* AdjacentCave3 = PlayerPtr->CavePtr->AdjacentCaves[2];
+    // if no arrows
 
-    // Get user input
+    SP->Play(SoundName::BOW_STRING);
+
+    if (PlayerPtr->ArrowsCount == 0)
+    {
+        return;
+    }
+
     std::vector<Cave*> ShootTrajectory;
-    std::wstring Input;
-    int CaveNumber{0};
-    int PreviousCaveNumber{-1};
-    std::wistringstream StringStream;
-    std::wcin.ignore(10, '\n');
-    while (true)
-    {   
-        Input.clear();
-        std::wcout << L"Куда стрелять: ";
-        std::getline(std::wcin, Input);
-        if (Input.empty())
-        {
-            continue;
-        }
-        if (!iswdigit(Input[0]))
-        {
-            std::wcout << L"Ошибка. Вводите до 5 цифр включительно (от 1 до 20 включительно) через пробел\n";
-            continue;
-        }
+    for (int CaveNum : GUI->ShootDiag->PathOut->CaveNumbersInPath)
+    {
+        ShootTrajectory.push_back(Caves[CaveNum]);
+    }
 
-        bool InputError = false;
-        StringStream = std::wistringstream{ Input };
-        while (StringStream >> CaveNumber)
-        {
-            if (CaveNumber == PreviousCaveNumber)
-            {
-                std::wcout << L"Ошибка. Введены подряд одинаковые цифры\n";
-                InputError = true;
-            }
-            PreviousCaveNumber = CaveNumber;
-
-            if (CaveNumber == PlayerPtr->CavePtr->Num)
-            {
-                std::wcout << L"Ошибка. Вы ввели номер своей пещеры. Хотите убить себя!?\n";
-                InputError = true;
-            }
-            if (!(0 < CaveNumber && CaveNumber < 21))
-            {
-                std::wcout << L"Ошибка. Вводите до 5 цифр включительно (от 1 до 20 включительно) через пробел\n";
-                InputError = true;
-            }
-            if (ShootTrajectory.size() > 4)
-            {
-                std::wcout << L"Ошибка. Вы ввели больше 5 цифр\n";
-                InputError = true;
-            }
-            if (InputError)
-            {
-                InputError = false;
-                ShootTrajectory.clear();
-                break;
-            }
-
-            ShootTrajectory.push_back(Caves[CaveNumber]);
-        }
-
-        if (!ShootTrajectory.empty() && !(ShootTrajectory[0] == AdjacentCave1 || ShootTrajectory[0] == AdjacentCave2 || ShootTrajectory[0] == AdjacentCave3))
-        {
-            std::wcout << L"Ошибка. Первая цифра должна быть: " << AdjacentCave1->Num << L" или " << AdjacentCave2->Num << L" или " << AdjacentCave3->Num << L"\n";
-            ShootTrajectory.clear();
-            continue;
-        }
-
-        if (!ShootTrajectory.empty())
-        {
-            break;
-        }
+    if (ShootTrajectory.empty())
+    {
+        return;
     }
 
     // Shoot
     Arrow* ArrowPtr = static_cast<Arrow*>(UnitFactory<Arrow>(PlayerPtr->CavePtr));
     ArrowPtr->Energy = ShootTrajectory.size(); // player shoot with less power == less caves
     PlayerPtr->ArrowsCount--;
+    GUI->HideOneArrow();
     if (!WampusPtr->IsAwake)
     {
         WampusPtr->IsAwake = true;
-        std::wcout << L"Ааррр, вы слышите чей-то рёв. Кажется вы кого-то разбудили 0_0\n";
+        Sleep(700);
+        SP->Play(SoundName::WAMPUS_WAKE_UP);
+        //std::wcout << L"Ааррр, вы слышите чей-то рёв. Кажется вы кого-то разбудили 0_0\n";
     }
     bool BadTrajectory = false;
     Cave* CurrentCavePtr = ShootTrajectory[0];
@@ -540,12 +530,15 @@ void Game::PlayerShoot()
 
         // fly fly
         //std::wcout << L"// стрела c энергией " << ArrowPtr->Energy << L" летит в пещеру " << TargetCavePtr->Number << L'\n';
-        std::wcout << L"вжууух\n";
+        //std::wcout << L"вжууух\n";
+        SP->Play(SoundName::ARROW_WHOOSH);
+        Sleep(100);
+
         MoveUnit(ArrowPtr, ArrowPtr->CavePtr, TargetCavePtr);
         CurrentCavePtr = TargetCavePtr;
         --ArrowPtr->Energy;
 
-        ResolveCollision(CurrentCavePtr);
+        //ResolveCollision(CurrentCavePtr);
 
         if (!BadTrajectory && CurrentCaveOrder < ShootTrajectory.size()-1)
         {
@@ -553,12 +546,12 @@ void Game::PlayerShoot()
             TargetCavePtr = ShootTrajectory[CurrentCaveOrder];
         }
 
-    std::wcout << L"тук-тук\n";
-    WaitForKey();
+    //std::wcout << L"тук-тук\n";
+    //WaitForKey();
     if (!PlayerPtr->ArrowsCount)
     {
-        std::wcout << L"Вы промазали и у вас закончились стрелы! В конце концов Вампус нашёл вас и слопал =*(\n";
-        WaitForKey();
+        //std::wcout << L"Вы промазали и у вас закончились стрелы! В конце концов Вампус нашёл вас и слопал =*(\n";
+        //WaitForKey();
         EndGame(false);
         return;
     }

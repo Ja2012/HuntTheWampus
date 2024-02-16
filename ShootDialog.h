@@ -22,6 +22,9 @@ public:
 	BowWidget* BowBtn = new BowWidget(BowImg);
 
 	void ShowCaveNumbers(std::vector<int>);
+	void HideCaveNumbers();
+	void ShowAllCaveNumbers();
+	void ShowAllExceptCaveNumbers(std::vector<int>);
 	std::vector<int> GetSelectedCaves();
 
 };

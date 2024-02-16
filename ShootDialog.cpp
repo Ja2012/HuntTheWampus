@@ -56,3 +56,39 @@ void ShootDialog::ShowCaveNumbers(std::vector<int> Numbers)
 		}
 	}
 }
+
+void ShootDialog::HideCaveNumbers()
+{
+	for (CaveNumberWidget* Widget : CaveNumberButtons)
+	{
+		Widget->hide();
+	}
+}
+
+void ShootDialog::ShowAllCaveNumbers()
+{
+	for (CaveNumberWidget* Widget : CaveNumberButtons)
+	{
+		Widget->show();
+	}
+}
+
+void ShootDialog::ShowAllExceptCaveNumbers(std::vector<int> Numbers)
+{
+	for (CaveNumberWidget* Widget : CaveNumberButtons)
+	{
+		if (std::find(Numbers.begin(), Numbers.end(), Widget->Number) != Numbers.end())
+		{
+			Widget->hide();
+		}
+		else
+		{
+			Widget->show();
+		}
+	}
+}
+
+std::vector<int> ShootDialog::GetSelectedCaves()
+{
+	return std::vector<int>();
+}

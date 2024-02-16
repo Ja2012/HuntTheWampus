@@ -13,4 +13,16 @@ GameWindow::GameWindow(int Width, int Height, const char* Label) : Fl_Double_Win
 
 	end();
 	show();
-};
+}
+void GameWindow::HideOneArrow()
+{
+	for (ArrowWidget* Arrow : Arrows)
+	{
+		if (Arrow->visible())
+		{
+			Arrow->hide();
+			return;
+		}
+	}
+}
+
