@@ -24,6 +24,8 @@ Game::Game()
     GUI->callback(CallbackKeyboardHit);
     GUI->QuitBtn->callback(CallbackClickQuit);
 
+    GUI->InfoDiag->OkBtn->callback(CallbackClickInfoDiagOk);
+
     GUI->Tunnel1->callback(CallbackClickTunnel, GUI->Tunnel1->TunnelNum);
     GUI->Tunnel2->callback(CallbackClickTunnel, GUI->Tunnel2->TunnelNum);
     GUI->Tunnel3->callback(CallbackClickTunnel, GUI->Tunnel3->TunnelNum);
@@ -127,7 +129,7 @@ void Game::EndGame(bool IsWin)
 {
     if (IsWin)
     {
-        std::wcout << L"\n\n\n********\nВы прошли игру! Поздравляем!\n********\n\n\n";
+        //std::wcout << L"\n\n\n********\nВы прошли игру! Поздравляем!\n********\n\n\n";
     } 
     //WaitForKey();
     exit(0);
@@ -175,17 +177,23 @@ void Game::CallbackClickTunnel(Fl_Widget* Widget, void* TunnelNumber)
     //std::cout << *static_cast<int*>(TunnelNumber) << '\n';
 
     Self->SP->StopAllExceptBackground();
-    Self->SP->Play(SoundName::WALK);
+    Self->SP->Play(SoundName::PLAYER_WALK);
     Self->PlayerMove(*static_cast<int*>(TunnelNumber));
 }
 
 void Game::CallbackClickBow(Fl_Widget* Widget)
 {
+    if (Self->IsDialogOpen()) return;
+    Self->GUI->InfoDiag->show();
+    return;
+
     Self->PlayerShoot();
 }
 
 void Game::CallbackClickSDErase(Fl_Widget* Widget)
 {
+    if (Self->IsDialogOpen()) return;
+
     Self->GUI->ShootDiag->PathOut->EraseLast();
     int CaveNum{0};
     if (Self->GUI->ShootDiag->PathOut->CaveNumbersInPath.empty())
@@ -222,6 +230,8 @@ void Game::CallbackClickSDErase(Fl_Widget* Widget)
 
 void Game::CallbackClickSDCaveNumberButton(Fl_Widget* Widget)
 {
+    if (Self->IsDialogOpen()) return;
+
     if (Self->GUI->ShootDiag->PathOut->CaveNumbersInPath.size() == 5)
     {
         return; // just in case situation. There should be no such situation.
@@ -267,6 +277,11 @@ void Game::CallbackClickSDCaveNumberButton(Fl_Widget* Widget)
 
     }
 
+}
+
+void Game::CallbackClickInfoDiagOk(Fl_Widget* Widget)
+{
+    Self->GUI->InfoDiag->hide();
 }
 
 
@@ -607,18 +622,20 @@ void Game::ResolveCollision(Cave* CavePtr)
 
     // TODO: collision for arrow
     // arrow in cave
-    if (0 && std::find_if(CavePtr->Units.begin(), CavePtr->Units.end(), [](Unit* UnitPtr) {return typeid(Arrow) == typeid(*UnitPtr); }) != CavePtr->Units.end())
+    if (std::find_if(CavePtr->Units.begin(), CavePtr->Units.end(), [](Unit* UnitPtr) {return typeid(Arrow) == typeid(*UnitPtr); }) != CavePtr->Units.end())
     {
         if (std::find_if(CavePtr->Units.begin(), CavePtr->Units.end(), [this](Unit* UnitPtr) {return WampusPtr == UnitPtr; }) != CavePtr->Units.end())
         {
-            std::wcout << L"ЧПОНЬК!!! Вы попали в Вампуса. Монстр убит.\n";
-            WaitForKey();
+            SP->Play(SoundName::WAMPUS_DIE);
+            //std::wcout << L"ЧПОНЬК!!! Вы попали в Вампуса. Монстр убит.\n";
+            //WaitForKey();
             EndGame(true);
         }
         if (std::find_if(CavePtr->Units.begin(), CavePtr->Units.end(), [this](Unit* UnitPtr) {return PlayerPtr == UnitPtr; }) != CavePtr->Units.end())
         {
-            std::wcout << L"АЙ!!! Стрела попала в вас. Вы погибли =*(\n";
-            WaitForKey();
+            SP->Play(SoundName::PLAYER_DIE);
+            //std::wcout << L"АЙ!!! Стрела попала в вас. Вы погибли =*(\n";
+            //WaitForKey();
             EndGame(false);
         }
         return;
@@ -690,8 +707,7 @@ void Game::ResolveCollision(Cave* CavePtr)
 
 bool Game::IsDialogOpen()
 {
-    return false;
-    //return bool(GUI->ShootDiag->visible());
+    return bool(GUI->InfoDiag->visible());
 }
 
 void Game::InitRandom()

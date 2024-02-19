@@ -72,5 +72,5 @@ private:
     static void CallbackClickBow(Fl_Widget* Widget);
     static void CallbackClickSDErase(Fl_Widget* Widget);
     static void CallbackClickSDCaveNumberButton(Fl_Widget* Widget);
+    static void CallbackClickInfoDiagOk(Fl_Widget* Widget);
 };
-

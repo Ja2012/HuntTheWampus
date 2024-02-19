@@ -9,6 +9,7 @@
 #include "ArrowWidget.h"
 #include "BowWidget.h"
 #include "ShootDialog.h"
+#include "InfoDialog.h"
 
 class GameWindow : public Fl_Double_Window
 {
@@ -20,11 +21,16 @@ public:
 	TunnelWidget* Tunnel3 = new TunnelWidget{ TunnelImg, Props::Tunnel3ImgPos.X, Props::Tunnel3ImgPos.Y };
 
 	Fl_Shared_Image* ArrowImg = static_cast<Fl_Shared_Image*>(Fl_Shared_Image::get(Consts::ArrowImgFileName)->copy(Props::ArrowImgSizeX, Props::ArrowImgSizeY));
-	ArrowWidget* Arrow1 = new ArrowWidget{ ArrowImg, Props::ArrowImgPosX, Props::ArrowImgPosY + 0 * Props::ArrowsYDistance};
-	ArrowWidget* Arrow2 = new ArrowWidget{ ArrowImg, Props::ArrowImgPosX, Props::ArrowImgPosY + 1 * Props::ArrowsYDistance};
-	ArrowWidget* Arrow3 = new ArrowWidget{ ArrowImg, Props::ArrowImgPosX, Props::ArrowImgPosY + 2 * Props::ArrowsYDistance};
-	ArrowWidget* Arrow4 = new ArrowWidget{ ArrowImg, Props::ArrowImgPosX, Props::ArrowImgPosY + 3 * Props::ArrowsYDistance};
-	ArrowWidget* Arrow5 = new ArrowWidget{ ArrowImg, Props::ArrowImgPosX, Props::ArrowImgPosY + 4 * Props::ArrowsYDistance};
+	ArrowWidget* Arrow1 = new ArrowWidget{ ArrowImg, Props::ArrowImgPosX,
+		Props::ArrowImgPosY + 0 * Props::ArrowsYDistance};
+	ArrowWidget* Arrow2 = new ArrowWidget{ ArrowImg, Props::ArrowImgPosX,
+		Props::ArrowImgPosY + 1 * Props::ArrowsYDistance};
+	ArrowWidget* Arrow3 = new ArrowWidget{ ArrowImg, Props::ArrowImgPosX,
+		Props::ArrowImgPosY + 2 * Props::ArrowsYDistance};
+	ArrowWidget* Arrow4 = new ArrowWidget{ ArrowImg, Props::ArrowImgPosX,
+		Props::ArrowImgPosY + 3 * Props::ArrowsYDistance};
+	ArrowWidget* Arrow5 = new ArrowWidget{ ArrowImg, Props::ArrowImgPosX,
+		Props::ArrowImgPosY + 4 * Props::ArrowsYDistance};
 	ArrowWidget* Arrows[5]{ Arrow1, Arrow2, Arrow3, Arrow4, Arrow5 };
 	void HideOneArrow();
 
@@ -33,6 +39,9 @@ public:
 
 
 	ShootDialog* ShootDiag;
+	InfoDialog* InfoDiag = new InfoDialog();
 
-	Fl_Button* QuitBtn = new Fl_Button(Props::ExitBtnPosX, Props::ExitBtnPosY, Props::ExitBtnSizeX, Props::ExitBtnSizeY, "@+81+");
+	Fl_Button* QuitBtn = new Fl_Button(Props::ExitBtnPosX, Props::ExitBtnPosY, 
+		Props::ExitBtnSizeX, Props::ExitBtnSizeY, "@+81+");
+
 };
