@@ -89,4 +89,8 @@ namespace Consts
 	inline constexpr int BowBtnPosY{ 990 };
 	// END Shoot Dialog Constants ---------------------------------------------
 
+	// Info Dialog
+	inline const char* GameOverImgFileName{ "GameOver.png" };
+	inline const char* YouWinImgFileName{ "YOU_WIN.png" };
+	inline const char* BatsImgFileName{ "BATS.png" };
 }

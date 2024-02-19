@@ -54,3 +54,4 @@ void OutputField::EraseLast()
 		Clear();
 	}
 }
+

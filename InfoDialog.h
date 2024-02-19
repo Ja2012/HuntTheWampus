@@ -1,17 +1,36 @@
 #pragma once
 #include "FLTK.h"
 #include "Properties.h"
+#include "OutputField.h"
+
 class InfoDialog : public Fl_Double_Window
 {
 public:
+	enum Type {
+		GAMEOVER_WAMPUS,
+		GAMEOVER_PIT,
+		GAMEOVER_ARROW,
+		GAMEOVER_NO_ARROWS,
+		BATS, 
+		YOUWIN};
 	InfoDialog(
-		int X = Props::CenterW - Props::ScrX * 0.35,
-		int Y = Props::CenterH - Props::ScrY * 0.35,
-		int W = Props::ScrX * 0.7, 
-		int H = Props::ScrY * 0.7);
+		int X = Props::CenterW - Props::ScrX * 0.45,
+		int Y = Props::CenterH - Props::ScrY * 0.30,
+		int W = Props::ScrX * 0.9, 
+		int H = Props::ScrY * 0.6);
+
+		int Offset = 60;		
+
+		Fl_Box* ResultImgBox = new Fl_Box(0, 0, 0, 0);
+		int ImgHeight;
+		Fl_PNG_Image* GameOverImg = new Fl_PNG_Image{ Consts::GameOverImgFileName };
+		Fl_PNG_Image* YouWinImg = new Fl_PNG_Image{ Consts::YouWinImgFileName };
+		Fl_PNG_Image* BatsImg = new Fl_PNG_Image{ Consts::BatsImgFileName };
+
+		OutputField* MessageField;
+
 		Fl_Button* OkBtn;
-	
-		Fl_PNG_Image* MapImg = static_cast<Fl_PNG_Image*>(Fl_PNG_Image(Consts::MapImageFileName).copy(Props::MapImgSize.X, Props::MapImgSize.Y));
-		MapWidget* Map = new MapWidget(MapImg);
+
+		void ShowInfo(Type);
 
 };
