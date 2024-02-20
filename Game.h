@@ -46,7 +46,8 @@ private:
     void PlayerShoot();
     void PlayerListen();
     void MoveUnit(Unit* TargetUnit, Cave* FromCave, Cave* ToCave);
-    void EndGame(bool IsWin);
+    void EndGame(SoundName, InfoDialog::Type);
+    void WampusWanders();
 
     // fields
     std::vector<Cave*> Caves;

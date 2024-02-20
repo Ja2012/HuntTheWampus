@@ -10,7 +10,7 @@ namespace Consts
 	inline constexpr int ScrY{ 1080 };	
 
 	// Tunnels
-	inline const char* TunnelImageFileName{ "Underground_tunnel3.png" };
+	inline const char* TunnelImageFileName{ "Images\\Underground_tunnel3.png" };
 
 	inline constexpr int TunnelImgSizeX{ 500 };
 	inline constexpr int TunnelImgSizeY{ 500 };
@@ -25,7 +25,7 @@ namespace Consts
 	inline constexpr int Tunnel3ImgPosY{ 30 };
 
 	// Map
-	inline const char* MapImageFileName{ "map2.png" };
+	inline const char* MapImageFileName{ "Images\\map2.png" };
 
 	inline constexpr int MapImgSizeX{ 550 };
 	inline constexpr int MapImgSizeY{ 550 };
@@ -41,7 +41,7 @@ namespace Consts
 	inline constexpr int CaveDrawYOffset{ 0 };
 
 	// Arrows
-	inline const char* ArrowImgFileName{ "arrow.png" };
+	inline const char* ArrowImgFileName{ "Images\\arrow.png" };
 
 	inline constexpr int ArrowImgSizeX{ 228 };
 	inline constexpr int ArrowImgSizeY{ 69 };
@@ -82,7 +82,7 @@ namespace Consts
 	inline constexpr int SDCaveLastBtnPosY{ 845 };
 
 	//		Bow button
-	inline const char* BowImgFileName{ "bow.png" };
+	inline const char* BowImgFileName{ "Images\\bow.png" };
 	inline constexpr int BowBtnSizeX{ 320 };
 	inline constexpr int BowBtnSizeY{ 75 };
 	inline constexpr int BowBtnPosX{ 1405 };
@@ -90,7 +90,7 @@ namespace Consts
 	// END Shoot Dialog Constants ---------------------------------------------
 
 	// Info Dialog
-	inline const char* GameOverImgFileName{ "GameOver.png" };
-	inline const char* YouWinImgFileName{ "YOU_WIN.png" };
-	inline const char* BatsImgFileName{ "BATS.png" };
+	inline const char* GameOverImgFileName{ "Images\\GameOver.png" };
+	inline const char* YouWinImgFileName{ "Images\\YOU_WIN.png" };
+	inline const char* BatsImgFileName{ "Images\\BATS.png" };
 }

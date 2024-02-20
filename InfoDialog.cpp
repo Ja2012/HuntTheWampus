@@ -1,4 +1,4 @@
-#include "InfoDialog.h"
+﻿#include "InfoDialog.h"
 
 InfoDialog::InfoDialog(int X, int Y, int W, int H ):
 	Fl_Double_Window(X, Y, W, H)
@@ -27,7 +27,7 @@ InfoDialog::InfoDialog(int X, int Y, int W, int H ):
 	MessageField->textsize(MessageTextSize);
 	MessageField->textfont(FL_TIMES_ITALIC);
 
-	ImgHeight = MessageField->y() - Offset - Offset;
+	ImgHeight = MessageField->y() - Offset * 3;
 
 	end();
 	hide();

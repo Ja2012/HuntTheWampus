@@ -54,6 +54,7 @@ void Game::PrapareGame()
     PlaceUnits();
 
     PlayerMove(PlayerPtr->CavePtr->Num);
+    _DebugPrintCavesUnits();
 }
 
 
@@ -74,8 +75,12 @@ void Game::MoveUnit(Unit* TargetUnitPtr, Cave* FromCavePtr, Cave* ToCavePtr)
     FromCavePtr->Units.erase(Iter);
 }
 
-void Game::EndGame(bool IsWin)
+void Game::EndGame(SoundName SN, InfoDialog::Type T)
 {
+    Self->SP->FadeOutAllExceptBackground(1);
+    Sleep(2);
+    SP->Play(SN);
+    GUI->InfoDiag->ShowInfo(T);
     exit(0);
 }
 
@@ -208,14 +213,15 @@ void Game::CbClickInfoDiagOk(Fl_Widget* Widget)
 
 void Game::_DebugPrintCavesUnits()
 {   
+    std::cout << "\v\v";
     for(Cave* CavePtr: Caves)
     {
-        std::wcout << L"// Cave " << CavePtr->Num << L": ";
+        std::cout << "// Cave " << CavePtr->Num << ": ";
         for(Unit* UnitPtr: CavePtr->Units)
         {
-            std::wcout << typeid(*UnitPtr).name() << L", ";
+            std::wcout << typeid(*UnitPtr).name() << ", ";
         }
-        std::wcout << L'\n';
+        std::cout << '\n';
     }
 }
 
@@ -327,7 +333,6 @@ void Game::PlayerListen()
     std::vector<Cave*> ShuffledCaves {AdjacentCave1, AdjacentCave2, AdjacentCave3};
     std::shuffle(ShuffledCaves.begin(), ShuffledCaves.end(), RandomEngine);
 
-    SoLoud::handle SoundHandle;
     for (Cave* CavePtr : ShuffledCaves)
     {
         for (Unit* UnitPtr : CavePtr->Units)
@@ -336,20 +341,20 @@ void Game::PlayerListen()
             {
                 if (static_cast<Wampus*>(UnitPtr)->IsAwake)
                 {
-                    SoundHandle = SP->PlayFadeIn(SoundName::NEAR_WAMPUS_AWAKE, 4);
+                    SP->PlayFadeIn(SoundName::NEAR_WAMPUS_AWAKE, 4);
                 }
                 else
                 {
-                    SoundHandle = SP->PlayFadeIn(SoundName::NEAR_WAMPUS_SLEEP, 4);
+                    SP->PlayFadeIn(SoundName::NEAR_WAMPUS_SLEEP, 4);
                 }
             }
             else if (typeid(*UnitPtr) == typeid(Bat))
             {
-                SoundHandle = SP->PlayFadeIn(SoundName::NEAR_BATS, 4);
+                SP->PlayFadeIn(SoundName::NEAR_BATS, 4);
             }
             else if (typeid(*UnitPtr) == typeid(Pit))
             {
-                SoundHandle = SP->PlayFadeIn(SoundName::NEAR_PIT, 4);
+                SP->PlayFadeIn(SoundName::NEAR_PIT, 4);
             }
         }
     }
@@ -359,22 +364,27 @@ void Game::PlayerListen()
 void Game::PlayerMove(int TunnelNumber)
 {
     Sleep(800);
+
+    // move player map mark and update player pos
     GUI->Map->UnsetPlayerCaveMark(PlayerPtr->CavePtr->Num);
     MoveUnit(PlayerPtr, PlayerPtr->CavePtr, Caves[TunnelNumber]);
     GUI->Map->SetPlayerCaveMark(TunnelNumber);
     
+    // show adjancent caves on map
     GUI->Map->ShowCave(TunnelNumber);
     for (int CaveNumber : PlayerPtr->CavePtr->AdjCaveNumbers)
     {
         GUI->Map->ShowCave(CaveNumber);
     }
 
+    // update tunnels numbers
     GUI->Tunnel1->SetLabel(PlayerPtr->CavePtr->AdjCaveNumbers[0]);
     GUI->Tunnel2->SetLabel(PlayerPtr->CavePtr->AdjCaveNumbers[1]);
     GUI->Tunnel3->SetLabel(PlayerPtr->CavePtr->AdjCaveNumbers[2]);
 
     GUI->Map->redraw();
 
+    // clean shooting path and update options where to shoot
     GUI->ShootDiag->PathOut->Clear();
     GUI->ShootDiag->ShowCaveNumbers(
         {
@@ -383,7 +393,17 @@ void Game::PlayerMove(int TunnelNumber)
             PlayerPtr->CavePtr->AdjCaveNumbers[2]
         }
     );
+    WampusWanders();
+    ResolveCollision(PlayerPtr->CavePtr);
+    PlayerListen();
+    _DebugPrintCavesUnits();
 
+
+
+}
+
+void Game::WampusWanders()
+{
     // if wampus in awake - he move in random cave
     if (WampusPtr->IsAwake)
     {
@@ -392,19 +412,13 @@ void Game::PlayerMove(int TunnelNumber)
             MoveUnit(WampusPtr, WampusPtr->CavePtr, WampusPtr->CavePtr->AdjacentCaves[roll_d3() - 1]);
             if (WampusPtr->CavePtr == PlayerPtr->CavePtr)
             {
-                SP->Play(SoundName::PLAYER_DIE);
-                GUI->InfoDiag->ShowInfo(GUI->InfoDiag->GAMEOVER_WAMPUS_WALK_IN_SAME_CAVE);
-                while (GUI->InfoDiag->shown()) Fl::wait();
-                EndGame(false);
+                EndGame(SoundName::PLAYER_DIE, GUI->InfoDiag->GAMEOVER_WAMPUS);
             }
         }
     }
 
-    PlayerListen();
-
-    ResolveCollision(PlayerPtr->CavePtr);
-
 }
+
 
 void Game::PlayerShoot()
 {
@@ -477,10 +491,7 @@ void Game::PlayerShoot()
 
     if (!PlayerPtr->ArrowsCount)
     {
-        GUI->InfoDiag->ShowInfo(GUI->InfoDiag->GAMEOVER_NO_ARROWS);
-        SP->Play(SoundName::PLAYER_DIE);
-        EndGame(false);
-        return;
+        EndGame(SoundName::PLAYER_DIE, GUI->InfoDiag->GAMEOVER_NO_ARROWS);
     }
 
     }
@@ -501,16 +512,12 @@ void Game::ResolveCollision(Cave* CavePtr)
         // player killed wampus
         if (std::find_if(CavePtr->Units.begin(), CavePtr->Units.end(), [this](Unit* UnitPtr) {return WampusPtr == UnitPtr; }) != CavePtr->Units.end())
         {
-            SP->Play(SoundName::WAMPUS_DIE);
-            GUI->InfoDiag->ShowInfo(GUI->InfoDiag->YOUWIN);
-            EndGame(true);
+            EndGame(SoundName::WAMPUS_DIE, GUI->InfoDiag->YOUWIN);
         }
         // arrow killed player
         if (std::find_if(CavePtr->Units.begin(), CavePtr->Units.end(), [this](Unit* UnitPtr) {return PlayerPtr == UnitPtr; }) != CavePtr->Units.end())
         {
-            SP->Play(SoundName::PLAYER_DIE);
-            GUI->InfoDiag->ShowInfo(GUI->InfoDiag->GAMEOVER_ARROW);
-            EndGame(false);
+            EndGame(SoundName::PLAYER_DIE, GUI->InfoDiag->GAMEOVER_ARROW);
         }
         return;
     }
@@ -530,9 +537,10 @@ void Game::ResolveCollision(Cave* CavePtr)
                     break;
                 }
             }
+            Self->SP->FadeOutAllExceptBackground(1);
+            Sleep(2);
             SP->Play(SoundName::PLAYER_DIE);
             GUI->InfoDiag->ShowInfo(GUI->InfoDiag->BATS);
-            Self->SP->FadeOutAllExceptBackground(2);
             PlayerMove(RandomCaveNum);
             break;
         }
@@ -540,9 +548,7 @@ void Game::ResolveCollision(Cave* CavePtr)
         // Pit
         if (typeid(*UnitPtr) == typeid(Pit))
         {
-            SP->Play(SoundName::PLAYER_FALL);
-            GUI->InfoDiag->ShowInfo(GUI->InfoDiag->GAMEOVER_PIT);
-            EndGame(false);
+            EndGame(SoundName::PLAYER_FALL, GUI->InfoDiag->GAMEOVER_PIT);
         }
 
         // Wampus
@@ -550,9 +556,7 @@ void Game::ResolveCollision(Cave* CavePtr)
         {
             if (WampusPtr->IsAwake)
             {
-                SP->Play(SoundName::PLAYER_DIE);
-                GUI->InfoDiag->ShowInfo(GUI->InfoDiag->GAMEOVER_WAMPUS);
-                EndGame(false);
+                EndGame(SoundName::PLAYER_DIE, GUI->InfoDiag->GAMEOVER_WAMPUS);
             }
             else
             {

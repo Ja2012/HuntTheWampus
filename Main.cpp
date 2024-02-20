@@ -11,7 +11,7 @@
 #include "GameWindow.h"
 #include "Game.h"
 
-int main() 
+int run()
 {
 	fl_register_images();
 	Fl::visual(FL_DOUBLE | FL_INDEX);
@@ -20,4 +20,9 @@ int main()
 
 	GameObj.PrapareGame();
 	return Fl::run();
+}
+
+int main() 
+{
+	return run();
 }

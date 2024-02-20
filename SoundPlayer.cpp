@@ -7,11 +7,11 @@ SoundPlayer::SoundPlayer()
     LoadFiles();
 }
 
-SoLoud::handle SoundPlayer::Play(SoundName Name, bool Paused)
+void SoundPlayer::Play(SoundName Name, bool Paused)
 {
     Sound* Item = GetSound(Name);
-    Item->Handle = Engine.play(Item->Obj, -1, 0, Paused);
-    return Item->Handle;
+    SoLoud::handle Handle = Engine.play(Item->Obj, -1, 0, Paused);
+    Item->Handles.push_back(Handle);
 }
 
 void SoundPlayer::StopAllExceptBackground()
@@ -32,7 +32,10 @@ void SoundPlayer::FadeOutAllExceptBackground(int Seconds)
     {
         if (Item.Name != SoundName::BACKGROUND)
         {
-            FadeOut(Item.Handle, Seconds);
+            for (SoLoud::handle Handle: Item.Handles)
+            {
+                FadeOut(Handle, Seconds);
+            }
         }
     }
 
@@ -40,6 +43,7 @@ void SoundPlayer::FadeOutAllExceptBackground(int Seconds)
 
 Sound* SoundPlayer::GetSound(SoundName Name)
 {
+    Sound* Item{};
     for (Sound& Item : Sounds)
     {
         if (Item.Name == Name)
@@ -47,32 +51,31 @@ Sound* SoundPlayer::GetSound(SoundName Name)
             return &Item;
         }
     }
+    return Item;
 }
-
-SoLoud::handle SoundPlayer::PlayFadeIn(SoundName Name, float Seconds)
+void SoundPlayer::PlayFadeIn(SoundName Name, float Seconds)
 {
     SoLoud::handle Handle;
     Sound* Item = GetSound(Name);
     Handle = Engine.play(Item->Obj, 0, 0, true);
-    Item->Handle = Handle;
+    Item->Handles.push_back(Handle);
     Engine.fadeVolume(Handle, Item->Volume, Seconds);
     Engine.setPause(Handle, false);
-    return Handle;
 }
 
-SoLoud::handle SoundPlayer::FadeOut(SoundName Name, float Seconds)
+void SoundPlayer::FadeOut(SoundName Name, float Seconds)
 {
     Sound* Item = GetSound(Name);
-    Engine.fadeVolume(Item->Handle, 0, Seconds);
-    Engine.scheduleStop(Item->Handle, Seconds);
-    return Item->Handle;
+    for (SoLoud::handle Handle: Item->Handles)
+    {
+        FadeOut(Handle, Seconds);
+    }
 }
 
-SoLoud::handle SoundPlayer::FadeOut(SoLoud::handle Handle, float Seconds)
+void SoundPlayer::FadeOut(SoLoud::handle Handle, float Seconds)
 {
     Engine.fadeVolume(Handle, 0, Seconds);
     Engine.scheduleStop(Handle, Seconds);
-    return Handle;
 }
 
 void SoundPlayer::LoadFiles()

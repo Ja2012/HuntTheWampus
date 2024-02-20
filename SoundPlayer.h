@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 #include "soloud.h"
 #include "soloud_wav.h"
 
@@ -33,7 +35,7 @@ struct Sound
 	SoundName Name;
 	const char* FileName;
 	SoLoud::Wav Obj;
-	SoLoud::handle Handle{0};
+	std::vector<SoLoud::handle> Handles;
 	float Volume{ 1.0 };
 	bool IsLooped{ false };
 };
@@ -45,32 +47,32 @@ public:
 
 	SoLoud::Soloud Engine;
 	Sound* GetSound(SoundName Name);
-	SoLoud::handle Play(SoundName Name, bool Paused = false);
-	SoLoud::handle PlayFadeIn(SoundName Name, float Seconds);
-	SoLoud::handle FadeOut(SoundName Name, float Seconds);
-	SoLoud::handle FadeOut(SoLoud::handle Handle, float Seconds);
+	void Play(SoundName Name, bool Paused = false);
+	void PlayFadeIn(SoundName Name, float Seconds);
+	void FadeOut(SoundName Name, float Seconds);
+	void FadeOut(SoLoud::handle Handle, float Seconds);
 	void StopAllExceptBackground();
 	void FadeOutAllExceptBackground(int Seconds);
 private:
 	Sound Sounds[13]
 	{
-		{2,		SoundName::BACKGROUND,			"BACKGROUND.wav",			true},
+		{2,		SoundName::BACKGROUND,			"Sounds\\BACKGROUND.wav",			true},
 
-		{0.1,	SoundName::PLAYER_WALK,			"PLAYER_WALK.wav"				},
-		{1,		SoundName::PLAYER_DIE,			"PLAYER_DIE.wav"				},
-		{1,		SoundName::PLAYER_FALL,			"PLAYER_FALL.wav"				},
+		{0.1,	SoundName::PLAYER_WALK,			"Sounds\\PLAYER_WALK.wav"				},
+		{0.8,	SoundName::PLAYER_DIE,			"Sounds\\PLAYER_DIE.wav"				},
+		{0.8,	SoundName::PLAYER_FALL,			"Sounds\\PLAYER_FALL.wav"				},
 
-		{1,		SoundName::NEAR_BATS,			"NEAR_BATS.wav",			true},
-		{1.4,	SoundName::NEAR_WAMPUS_SLEEP,	"NEAR_WAMPUS_SLEEP.wav",	true},
-		{2,		SoundName::NEAR_WAMPUS_AWAKE,	"NEAR_WAMPUS_AWAKE.wav",	true},
-		{0.6,	SoundName::NEAR_PIT,			"NEAR_PIT.wav",				true},
+		{1,		SoundName::NEAR_BATS,			"Sounds\\NEAR_BATS.wav",			true},
+		{1.2,	SoundName::NEAR_WAMPUS_SLEEP,	"Sounds\\NEAR_WAMPUS_SLEEP.wav",	true},
+		{0.8,	SoundName::NEAR_WAMPUS_AWAKE,	"Sounds\\NEAR_WAMPUS_AWAKE.wav",	true},
+		{0.6,	SoundName::NEAR_PIT,			"Sounds\\NEAR_PIT.wav",				true},
 
-		{0.2,	SoundName::BOW_READY,			"BOW_READY.wav"					},
-		{1,		SoundName::BOW_STRING,			"BOW_STRING.wav",				},
-		{1,		SoundName::ARROW_WHOOSH,		"ARROW_WHOOSH.wav",				},
+		{0.2,	SoundName::BOW_READY,			"Sounds\\BOW_READY.wav"					},
+		{1,		SoundName::BOW_STRING,			"Sounds\\BOW_STRING.wav",				},
+		{1,		SoundName::ARROW_WHOOSH,		"Sounds\\ARROW_WHOOSH.wav",				},
 
-		{1,		SoundName::WAMPUS_WAKE_UP,		"WAMPUS_WAKE_UP.wav",			},
-		{1,		SoundName::WAMPUS_DIE,			"WAMPUS_DIE.wav",				},
+		{1,		SoundName::WAMPUS_WAKE_UP,		"Sounds\\WAMPUS_WAKE_UP.wav",			},
+		{1,		SoundName::WAMPUS_DIE,			"Sounds\\WAMPUS_DIE.wav",				},
 	};
 	void LoadFiles();
 };
