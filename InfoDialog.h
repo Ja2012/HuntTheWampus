@@ -3,11 +3,13 @@
 #include "Properties.h"
 #include "OutputField.h"
 
+//class InfoDialog : public Fl_Box
 class InfoDialog : public Fl_Double_Window
 {
 public:
 	enum Type {
 		GAMEOVER_WAMPUS,
+		GAMEOVER_WAMPUS_WALK_IN_SAME_CAVE,
 		GAMEOVER_PIT,
 		GAMEOVER_ARROW,
 		GAMEOVER_NO_ARROWS,

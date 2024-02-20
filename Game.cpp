@@ -21,91 +21,39 @@ Game::Game()
     Self = this;
 
     // SetUp callbacks
-    GUI->callback(CallbackKeyboardHit);
-    GUI->QuitBtn->callback(CallbackClickQuit);
+    GUI->callback(CbKeyboardHit);
+    GUI->QuitBtn->callback(CbClickQuit);
 
-    GUI->InfoDiag->OkBtn->callback(CallbackClickInfoDiagOk);
+    GUI->InfoDiag->OkBtn->callback(CbClickInfoDiagOk);
 
-    GUI->Tunnel1->callback(CallbackClickTunnel, GUI->Tunnel1->TunnelNum);
-    GUI->Tunnel2->callback(CallbackClickTunnel, GUI->Tunnel2->TunnelNum);
-    GUI->Tunnel3->callback(CallbackClickTunnel, GUI->Tunnel3->TunnelNum);
+    GUI->Tunnel1->callback(CbClickTunnel, GUI->Tunnel1->TunnelNum);
+    GUI->Tunnel2->callback(CbClickTunnel, GUI->Tunnel2->TunnelNum);
+    GUI->Tunnel3->callback(CbClickTunnel, GUI->Tunnel3->TunnelNum);
 
-    GUI->ShootDiag->EraseBtn->callback(CallbackClickSDErase);
+    GUI->ShootDiag->EraseBtn->callback(CbClickSDErase);
     for (CaveNumberWidget* Widget : GUI->ShootDiag->CaveNumberButtons)
     {
-        Widget->callback(CallbackClickSDCaveNumberButton);
+        Widget->callback(CbClickSDCaveNumberButton);
     }
-    GUI->ShootDiag->BowBtn->callback(CallbackClickBow);
+    GUI->ShootDiag->BowBtn->callback(CbClickBow);
 }
 
-void Game::MainLoop()
+
+void Game::CbIdle(void* Data)
 {
-    int TurnNumber = 1;
-    while (true)
-    {
-        std::wcout << L"\n-------- Ход " << TurnNumber << " --------\n";
-        //_DebugPrintCavesUnits();
-        PlayerListen();
-
-        PlayerAnswer PlayerDesicion = AskWhatPlayerWantToDo();
-        if (PlayerDesicion == PlayerAnswer::Move)
-        {
-            //PlayerMove();
-        }
-        else if (PlayerDesicion == PlayerAnswer::Shoot)
-        {
-            PlayerShoot();
-        }
-        
-        // TODO не забыть добавить рандомное движение вампуса после пробуждения в ГУЙ версию
-        if (WampusPtr->IsAwake)
-        {
-            if (roll_d100() <= 75)
-            {
-                MoveUnit(WampusPtr, WampusPtr->CavePtr, WampusPtr->CavePtr->AdjacentCaves[roll_d3()-1]);
-                if (WampusPtr->CavePtr == PlayerPtr->CavePtr)
-                {
-                    std::wcout << L"Одновременно с вами в пещеру " << PlayerPtr->CavePtr->Num << L" заходит Вампус!\n";
-                }
-            }
-        }
-
-        ResolveCollision(PlayerPtr->CavePtr);
-
-        ++TurnNumber;
-    }
-
+    
 }
 
 void Game::PrapareGame()
 {
+    //Fl::add_idle(CbIdle);
+
     SP->Play(SoundName::BACKGROUND);
     InitRandom();
     LinkCaves();
     PlaceUnits();
 
     PlayerMove(PlayerPtr->CavePtr->Num);
-}
-
-void Game::Start()
-{   
-    PrapareGame();
-
-    std::wcout << L"Здравствуйте. Добро пожаловать в игру \"Убей Вампуса\".\n" 
-        << L"Цель игры - убить монстра из лука в тёмной системе пещер.\n" 
-        << L"---\n" 
-        << L"У вас есть 5 стрел. Стрелы необычные,\n" 
-        << L"так как они могут лететь по заданному вами маршруту.\n" 
-        << L"Для этого, после команды стрелять нужно ввести последовательность\n" 
-        << L"пролёта пещер. Например: 5 3 20. До 5 пещер включительно.\n" 
-        << L"Если пещера указана неправильно, стрела полетит случайно и может убить Вас.\n" 
-        << L"---\n" 
-        << L"Также в пещерах есть другие существа и препятствия.\n" 
-        << L"Ваш тонкий слух поможет ориентироваться\n" 
-        << L"Начнём!\n\n";
-
-    MainLoop();
-
 }
 
 
@@ -128,34 +76,10 @@ void Game::MoveUnit(Unit* TargetUnitPtr, Cave* FromCavePtr, Cave* ToCavePtr)
 
 void Game::EndGame(bool IsWin)
 {
-    if (IsWin)
-    {
-        //std::wcout << L"\n\n\n********\nВы прошли игру! Поздравляем!\n********\n\n\n";
-    } 
-    //WaitForKey();
     exit(0);
-
-    //std::wcout << L"Попробовать ещё раз?\n";
-    //if (AskYesNo() == PlayerAnswer::Yes)
-    //{
-    //    //TODO 
-    //    exit(0);
-    //}
-    //else
-    //{
-    //    //TODO
-    //    exit(0);
-    //}
 }
 
-void Game::WaitForKey()
-{
-    std::wcout << L"(нажмите любую кнопку чтобы продолжить)\n";
-    while(!_kbhit()) { }
-    _getch();
-}
-
-void Game::CallbackKeyboardHit(Fl_Widget* Widget)
+void Game::CbKeyboardHit(Fl_Widget* Widget)
 {
     if (Fl::event() == FL_SHORTCUT && Fl::event_key() == FL_Escape)
     {
@@ -163,7 +87,7 @@ void Game::CallbackKeyboardHit(Fl_Widget* Widget)
     }
 }
 
-void Game::CallbackClickQuit(Fl_Widget* Widget)
+void Game::CbClickQuit(Fl_Widget* Widget)
 {
     if (Fl::event() == FL_SHORTCUT && Fl::event_key() == FL_Escape)
     {
@@ -173,28 +97,21 @@ void Game::CallbackClickQuit(Fl_Widget* Widget)
 	exit(0); 
 }
 
-void Game::CallbackClickTunnel(Fl_Widget* Widget, void* TunnelNumber)
+void Game::CbClickTunnel(Fl_Widget* Widget, void* TunnelNumber)
 {
     if (Self->IsDialogOpen()) return;
-    //std::cout << *static_cast<int*>(TunnelNumber) << '\n';
-
-    Self->SP->StopAllExceptBackground();
+    Self->SP->FadeOutAllExceptBackground(2);
     Self->SP->Play(SoundName::PLAYER_WALK);
     Self->PlayerMove(*static_cast<int*>(TunnelNumber));
 }
 
-void Game::CallbackClickBow(Fl_Widget* Widget)
+void Game::CbClickBow(Fl_Widget* Widget)
 {
     if (Self->IsDialogOpen()) return;
-    InfoDialog* Diag = Self->GUI->InfoDiag;
-    //Diag->SetInfo(Diag->YOUWIN);
-    //Diag->show();
-    return;
-
     Self->PlayerShoot();
 }
 
-void Game::CallbackClickSDErase(Fl_Widget* Widget)
+void Game::CbClickSDErase(Fl_Widget* Widget)
 {
     if (Self->IsDialogOpen()) return;
 
@@ -232,7 +149,7 @@ void Game::CallbackClickSDErase(Fl_Widget* Widget)
     }
 }
 
-void Game::CallbackClickSDCaveNumberButton(Fl_Widget* Widget)
+void Game::CbClickSDCaveNumberButton(Fl_Widget* Widget)
 {
     if (Self->IsDialogOpen()) return;
 
@@ -283,7 +200,7 @@ void Game::CallbackClickSDCaveNumberButton(Fl_Widget* Widget)
 
 }
 
-void Game::CallbackClickInfoDiagOk(Fl_Widget* Widget)
+void Game::CbClickInfoDiagOk(Fl_Widget* Widget)
 {
     Self->GUI->InfoDiag->hide();
 }
@@ -406,11 +323,6 @@ void Game::PlayerListen()
     Cave* AdjacentCave1 = PlayerPtr->CavePtr->AdjacentCaves[0];
     Cave* AdjacentCave2 = PlayerPtr->CavePtr->AdjacentCaves[1];
     Cave* AdjacentCave3 = PlayerPtr->CavePtr->AdjacentCaves[2];
-    //std::wcout << L"Вы в пещере номер " << PlayerPtr->CavePtr->Num
-    //    << L". Туннели ведут в пещеры номер: "
-    //    << AdjacentCave1->Num << L", "
-    //    << AdjacentCave2->Num << L", "
-    //    << AdjacentCave3->Num << L".\n";
 
     std::vector<Cave*> ShuffledCaves {AdjacentCave1, AdjacentCave2, AdjacentCave3};
     std::shuffle(ShuffledCaves.begin(), ShuffledCaves.end(), RandomEngine);
@@ -425,36 +337,24 @@ void Game::PlayerListen()
                 if (static_cast<Wampus*>(UnitPtr)->IsAwake)
                 {
                     SoundHandle = SP->PlayFadeIn(SoundName::NEAR_WAMPUS_AWAKE, 4);
-
-                    //std::wcout << L"Слышно как кто-то топает\n";
                 }
                 else
                 {
                     SoundHandle = SP->PlayFadeIn(SoundName::NEAR_WAMPUS_SLEEP, 4);
-                    //std::wcout << L"Слышно как кто-то храпит\n";
                 }
             }
             else if (typeid(*UnitPtr) == typeid(Bat))
             {
                 SoundHandle = SP->PlayFadeIn(SoundName::NEAR_BATS, 4);
-                //std::wcout << L"Слышно хлопот крыльев\n";
             }
             else if (typeid(*UnitPtr) == typeid(Pit))
             {
                 SoundHandle = SP->PlayFadeIn(SoundName::NEAR_PIT, 4);
-                //std::wcout << L"Слышно завывание ветра\n";
             }
         }
     }
 
 }
-
-
-inline bool IsNumber(const std::wstring& Str)
-{
-    return !Str.empty() && std::find_if(Str.begin(), Str.end(), [](wchar_t Char) {return !iswdigit(Char); }) == Str.end();
-}
-
 
 void Game::PlayerMove(int TunnelNumber)
 {
@@ -483,6 +383,23 @@ void Game::PlayerMove(int TunnelNumber)
             PlayerPtr->CavePtr->AdjCaveNumbers[2]
         }
     );
+
+    // if wampus in awake - he move in random cave
+    if (WampusPtr->IsAwake)
+    {
+        if (roll_d100() <= 75)
+        {
+            MoveUnit(WampusPtr, WampusPtr->CavePtr, WampusPtr->CavePtr->AdjacentCaves[roll_d3() - 1]);
+            if (WampusPtr->CavePtr == PlayerPtr->CavePtr)
+            {
+                SP->Play(SoundName::PLAYER_DIE);
+                GUI->InfoDiag->ShowInfo(GUI->InfoDiag->GAMEOVER_WAMPUS_WALK_IN_SAME_CAVE);
+                while (GUI->InfoDiag->shown()) Fl::wait();
+                EndGame(false);
+            }
+        }
+    }
+
     PlayerListen();
 
     ResolveCollision(PlayerPtr->CavePtr);
@@ -491,14 +408,13 @@ void Game::PlayerMove(int TunnelNumber)
 
 void Game::PlayerShoot()
 {
-    // if no arrows
-
-    SP->Play(SoundName::BOW_STRING);
-
+    // if no arrows - impossible situation, but
     if (PlayerPtr->ArrowsCount == 0)
     {
         return;
     }
+
+    SP->Play(SoundName::BOW_STRING);
 
     std::vector<Cave*> ShootTrajectory;
     for (int CaveNum : GUI->ShootDiag->PathOut->CaveNumbersInPath)
@@ -521,7 +437,6 @@ void Game::PlayerShoot()
         WampusPtr->IsAwake = true;
         Sleep(700);
         SP->Play(SoundName::WAMPUS_WAKE_UP);
-        //std::wcout << L"Ааррр, вы слышите чей-то рёв. Кажется вы кого-то разбудили 0_0\n";
     }
     bool BadTrajectory = false;
     Cave* CurrentCavePtr = ShootTrajectory[0];
@@ -531,7 +446,6 @@ void Game::PlayerShoot()
     {
         if (ArrowPtr->Energy < 1)
         {
-            //std::wcout << L"// стрела устала\n";
             DestroyUnit(ArrowPtr);
             break;
         }
@@ -539,7 +453,6 @@ void Game::PlayerShoot()
         if (!BadTrajectory && std::find(ArrowPtr->CavePtr->AdjacentCaves.begin(), ArrowPtr->CavePtr->AdjacentCaves.end(), TargetCavePtr) == ArrowPtr->CavePtr->AdjacentCaves.end())
         {
             BadTrajectory = true;
-            //std::wcout << L"// стрела сбилась - летит случайно\n";
         }
 
         if (BadTrajectory)
@@ -547,11 +460,8 @@ void Game::PlayerShoot()
             TargetCavePtr = CurrentCavePtr->AdjacentCaves[roll_d3() - 1];
         }
 
-        // fly fly
-        //std::wcout << L"// стрела c энергией " << ArrowPtr->Energy << L" летит в пещеру " << TargetCavePtr->Number << L'\n';
-        //std::wcout << L"вжууух\n";
         SP->Play(SoundName::ARROW_WHOOSH);
-        Sleep(100);
+        Sleep(200);
 
         MoveUnit(ArrowPtr, ArrowPtr->CavePtr, TargetCavePtr);
         CurrentCavePtr = TargetCavePtr;
@@ -565,12 +475,8 @@ void Game::PlayerShoot()
             TargetCavePtr = ShootTrajectory[CurrentCaveOrder];
         }
 
-    //std::wcout << L"тук-тук\n";
-    //WaitForKey();
     if (!PlayerPtr->ArrowsCount)
     {
-        //std::wcout << L"Вы промазали и у вас закончились стрелы! В конце концов Вампус нашёл вас и слопал =*(\n";
-        //WaitForKey();
         GUI->InfoDiag->ShowInfo(GUI->InfoDiag->GAMEOVER_NO_ARROWS);
         SP->Play(SoundName::PLAYER_DIE);
         EndGame(false);
@@ -580,43 +486,6 @@ void Game::PlayerShoot()
     }
 }
 
-PlayerAnswer Game::AskWhatPlayerWantToDo()
-{
-    std::wstring Input;
-    while (true)
-    {
-        std::wcout << L"Чтобы двигаться напишите \"Д\", чтобы стрелять \"С\": ";
-        std::wcin >> Input;
-
-        if (Input == L"д" || Input == L"Д")
-        {
-            return PlayerAnswer::Move;
-        }
-        else if (Input == L"с" || Input == L"С")
-        {
-            return PlayerAnswer::Shoot;
-        }
-     }
- }
-
-PlayerAnswer Game::AskYesNo()
-{
-    std::wstring Input;
-    while (true)
-    {
-        std::wcout << L"\"да\" или \"нет\": ";
-        std::wcin >> Input;
-
-        if (Input == L"да")
-        {
-            return PlayerAnswer::Yes;
-        }
-        else if (Input == L"нет")
-        {
-            return PlayerAnswer::No;
-        }
-    }
-}
 
 void Game::ResolveCollision(Cave* CavePtr)
 {
@@ -632,33 +501,25 @@ void Game::ResolveCollision(Cave* CavePtr)
         // player killed wampus
         if (std::find_if(CavePtr->Units.begin(), CavePtr->Units.end(), [this](Unit* UnitPtr) {return WampusPtr == UnitPtr; }) != CavePtr->Units.end())
         {
-            GUI->InfoDiag->ShowInfo(GUI->InfoDiag->YOUWIN);
             SP->Play(SoundName::WAMPUS_DIE);
-            //std::wcout << L"ЧПОНЬК!!! Вы попали в Вампуса. Монстр убит.\n";
-            //WaitForKey();
+            GUI->InfoDiag->ShowInfo(GUI->InfoDiag->YOUWIN);
             EndGame(true);
         }
         // arrow killed player
         if (std::find_if(CavePtr->Units.begin(), CavePtr->Units.end(), [this](Unit* UnitPtr) {return PlayerPtr == UnitPtr; }) != CavePtr->Units.end())
         {
-            GUI->InfoDiag->ShowInfo(GUI->InfoDiag->GAMEOVER_ARROW);
             SP->Play(SoundName::PLAYER_DIE);
-            //std::wcout << L"АЙ!!! Стрела попала в вас. Вы погибли =*(\n";
-            //WaitForKey();
+            GUI->InfoDiag->ShowInfo(GUI->InfoDiag->GAMEOVER_ARROW);
             EndGame(false);
         }
         return;
     }
 
-
     for (Unit* UnitPtr : CavePtr->Units)
     {
-
         // bats
         if (typeid(*UnitPtr) == typeid(Bat))
         {
-
-
             // lets fly!
             int RandomCaveNum{};
             while (true)
@@ -669,24 +530,18 @@ void Game::ResolveCollision(Cave* CavePtr)
                     break;
                 }
             }
+            SP->Play(SoundName::PLAYER_DIE);
             GUI->InfoDiag->ShowInfo(GUI->InfoDiag->BATS);
-            //SP->Play(SoundName::PLAYER_DIE);
-
+            Self->SP->FadeOutAllExceptBackground(2);
             PlayerMove(RandomCaveNum);
-            //std::wcout << L"Вы вспугнули летучих мышей. Они схватили вас и перенесли в другую пещеру\n";
-            //WaitForKey();
-            //std::wcout << L"// Крысы бросают игрока в пещеру номер " << RandomCaveNum << L'\n';
-            ResolveCollision(PlayerPtr->CavePtr);
             break;
         }
 
         // Pit
         if (typeid(*UnitPtr) == typeid(Pit))
         {
-            //std::wcout << L"УУИИИИ!!! Вы упали в пропасть и разбились =*(\n";
-            //WaitForKey();
+            SP->Play(SoundName::PLAYER_FALL);
             GUI->InfoDiag->ShowInfo(GUI->InfoDiag->GAMEOVER_PIT);
-            SP->Play(SoundName::PLAYER_DIE);
             EndGame(false);
         }
 
@@ -695,27 +550,22 @@ void Game::ResolveCollision(Cave* CavePtr)
         {
             if (WampusPtr->IsAwake)
             {
-                GUI->InfoDiag->ShowInfo(GUI->InfoDiag->GAMEOVER_WAMPUS);
                 SP->Play(SoundName::PLAYER_DIE);
+                GUI->InfoDiag->ShowInfo(GUI->InfoDiag->GAMEOVER_WAMPUS);
                 EndGame(false);
-
-                //std::wcout << L"Вампус помахал вам рукой, а потом слопал =*(\n";
-                //WaitForKey();
             }
             else
             {
-                std::wcout << L"Вы разбудили Вампуса. ";
-                WaitForKey();
                 WampusPtr->IsAwake = true;
                 if (roll_d100() > 75)
                 {
+                    // Wampus stay in same room
                     ResolveCollision(PlayerPtr->CavePtr);
                 }
                 else
                 {
+                    // Wampus left the room
                     MoveUnit(WampusPtr, WampusPtr->CavePtr, WampusPtr->CavePtr->AdjacentCaves[roll_d3()-1]);
-                    //std::wcout << L"Он испугался и убежал\n";
-                    //WaitForKey();
                 }
             }
         }

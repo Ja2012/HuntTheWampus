@@ -9,6 +9,7 @@ enum class SoundName
 
 	PLAYER_WALK, 
 	PLAYER_DIE,
+	PLAYER_FALL,
 
 	NEAR_BATS,
 	NEAR_WAMPUS_SLEEP,
@@ -46,14 +47,18 @@ public:
 	Sound* GetSound(SoundName Name);
 	SoLoud::handle Play(SoundName Name, bool Paused = false);
 	SoLoud::handle PlayFadeIn(SoundName Name, float Seconds);
+	SoLoud::handle FadeOut(SoundName Name, float Seconds);
+	SoLoud::handle FadeOut(SoLoud::handle Handle, float Seconds);
 	void StopAllExceptBackground();
+	void FadeOutAllExceptBackground(int Seconds);
 private:
-	Sound Sounds[12]
+	Sound Sounds[13]
 	{
 		{2,		SoundName::BACKGROUND,			"BACKGROUND.wav",			true},
 
 		{0.1,	SoundName::PLAYER_WALK,			"PLAYER_WALK.wav"				},
 		{1,		SoundName::PLAYER_DIE,			"PLAYER_DIE.wav"				},
+		{1,		SoundName::PLAYER_FALL,			"PLAYER_FALL.wav"				},
 
 		{1,		SoundName::NEAR_BATS,			"NEAR_BATS.wav",			true},
 		{1.4,	SoundName::NEAR_WAMPUS_SLEEP,	"NEAR_WAMPUS_SLEEP.wav",	true},

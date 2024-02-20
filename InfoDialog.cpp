@@ -42,6 +42,11 @@ void InfoDialog::ShowInfo(Type Type)
 		TitleImg = GameOverImg;
 		Message = "You were eaten by a Wampus.";
 	}
+	if (Type == GAMEOVER_WAMPUS_WALK_IN_SAME_CAVE)
+	{
+		TitleImg = GameOverImg;
+		Message = "You were really unlucky because Wampus entered the same cave with you and eat you.";
+	}
 	else if (Type == GAMEOVER_PIT)
 	{
 		TitleImg = GameOverImg;
@@ -82,5 +87,6 @@ void InfoDialog::ShowInfo(Type Type)
 	ResultImgBox->image(static_cast<Fl_PNG_Image*>(TitleImg->copy(ImgWidth, ImgHeight)));
 
 	show();
+	while (shown()) Fl::wait();
 }
 	
