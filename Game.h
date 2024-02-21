@@ -71,4 +71,5 @@ private:
     static void CbClickSDErase(Fl_Widget* Widget);
     static void CbClickSDCaveNumberButton(Fl_Widget* Widget);
     static void CbClickInfoDiagOk(Fl_Widget* Widget);
+    static void CbClickMapCave(Fl_Widget* Widget);
 };

@@ -412,7 +412,7 @@ void Game::WampusWanders()
             MoveUnit(WampusPtr, WampusPtr->CavePtr, WampusPtr->CavePtr->AdjacentCaves[roll_d3() - 1]);
             if (WampusPtr->CavePtr == PlayerPtr->CavePtr)
             {
-                EndGame(SoundName::PLAYER_DIE, GUI->InfoDiag->GAMEOVER_WAMPUS);
+                EndGame(SoundName::PLAYER_DIE, GUI->InfoDiag->GAMEOVER_WAMPUS_WALK_IN_SAME_CAVE);
             }
         }
     }
@@ -483,18 +483,21 @@ void Game::PlayerShoot()
 
         ResolveCollision(CurrentCavePtr);
 
-        if (!BadTrajectory && CurrentCaveOrder < ShootTrajectory.size()-1)
+        if (!BadTrajectory && CurrentCaveOrder < ShootTrajectory.size() - 1)
         {
             ++CurrentCaveOrder;
             TargetCavePtr = ShootTrajectory[CurrentCaveOrder];
         }
+    }
+
+    WampusWanders();
 
     if (!PlayerPtr->ArrowsCount)
     {
-        EndGame(SoundName::PLAYER_DIE, GUI->InfoDiag->GAMEOVER_NO_ARROWS);
+        EndGame(SoundName::SAD_TROMBONE, GUI->InfoDiag->GAMEOVER_NO_ARROWS);
     }
+    _DebugPrintCavesUnits();
 
-    }
 }
 
 
@@ -506,76 +509,71 @@ void Game::ResolveCollision(Cave* CavePtr)
         return;
     }
 
-    // arrow in cave
-    if (std::find_if(CavePtr->Units.begin(), CavePtr->Units.end(), [](Unit* UnitPtr) {return typeid(Arrow) == typeid(*UnitPtr); }) != CavePtr->Units.end())
-    {
-        // player killed wampus
-        if (std::find_if(CavePtr->Units.begin(), CavePtr->Units.end(), [this](Unit* UnitPtr) {return WampusPtr == UnitPtr; }) != CavePtr->Units.end())
-        {
-            EndGame(SoundName::WAMPUS_DIE, GUI->InfoDiag->YOUWIN);
-        }
-        // arrow killed player
-        if (std::find_if(CavePtr->Units.begin(), CavePtr->Units.end(), [this](Unit* UnitPtr) {return PlayerPtr == UnitPtr; }) != CavePtr->Units.end())
-        {
-            EndGame(SoundName::PLAYER_DIE, GUI->InfoDiag->GAMEOVER_ARROW);
-        }
-        return;
-    }
-
+    bool ArrowInCave{ false };
+    bool BatsInCave{ false };
+    bool PitInCave{ false };
+    bool WampusInCave{ false };
+    bool PlayerInCave{ false };
     for (Unit* UnitPtr : CavePtr->Units)
     {
-        // bats
-        if (typeid(*UnitPtr) == typeid(Bat))
+        const std::type_info& UnitType = typeid(*UnitPtr);
+        if (UnitType == typeid(Arrow)) ArrowInCave = true;
+        else if (UnitType == typeid(Bat)) BatsInCave = true;
+        else if (UnitType == typeid(Pit)) PitInCave = true;
+        else if (UnitType == typeid(Wampus)) WampusInCave = true;
+        else if (UnitType == typeid(Player)) PlayerInCave = true;
+    }
+
+    if (ArrowInCave && WampusInCave) EndGame(SoundName::WAMPUS_DIE, GUI->InfoDiag->YOUWIN);
+
+    if (ArrowInCave && PlayerInCave) EndGame(SoundName::PLAYER_DIE, GUI->InfoDiag->GAMEOVER_ARROW);
+
+    if (BatsInCave && PlayerInCave)
+    {
+        int RandomCaveNum{};
+        while (true)
         {
-            // lets fly!
-            int RandomCaveNum{};
-            while (true)
+            RandomCaveNum = roll_d20();
+            if (RandomCaveNum != PlayerPtr->CavePtr->Num)
             {
-                RandomCaveNum = roll_d20();
-                if (RandomCaveNum != PlayerPtr->CavePtr->Num)
-                {
-                    break;
-                }
+                break;
             }
-            Self->SP->FadeOutAllExceptBackground(1);
-            Sleep(2);
-            SP->Play(SoundName::PLAYER_DIE);
-            GUI->InfoDiag->ShowInfo(GUI->InfoDiag->BATS);
-            PlayerMove(RandomCaveNum);
-            break;
         }
+        Self->SP->FadeOutAllExceptBackground(1);
+        Sleep(2);
+        SP->Play(SoundName::BATS_IN_FACE);
+        GUI->InfoDiag->ShowInfo(GUI->InfoDiag->BATS);
+        PlayerMove(RandomCaveNum);
+        ResolveCollision(Caves[RandomCaveNum]);
+    }
 
-        // Pit
-        if (typeid(*UnitPtr) == typeid(Pit))
+    if (PitInCave && PlayerInCave) EndGame(SoundName::PLAYER_FALL, GUI->InfoDiag->GAMEOVER_PIT);
+
+    if (WampusInCave && PlayerInCave)
+    {
+        if (WampusPtr->IsAwake)
         {
-            EndGame(SoundName::PLAYER_FALL, GUI->InfoDiag->GAMEOVER_PIT);
+            EndGame(SoundName::PLAYER_DIE, GUI->InfoDiag->GAMEOVER_WAMPUS);
         }
-
-        // Wampus
-        if (UnitPtr == WampusPtr)
+        else
         {
-            if (WampusPtr->IsAwake)
+            WampusPtr->IsAwake = true;
+            if (roll_d100() > 75)
             {
-                EndGame(SoundName::PLAYER_DIE, GUI->InfoDiag->GAMEOVER_WAMPUS);
+                // Wampus stay in same room and kill player
+                EndGame(SoundName::WAMPUS_WAKE_UP, GUI->InfoDiag->GAMEOVER_WOKE_UP_WAMPUS);
             }
             else
             {
-                WampusPtr->IsAwake = true;
-                if (roll_d100() > 75)
-                {
-                    // Wampus stay in same room
-                    ResolveCollision(PlayerPtr->CavePtr);
-                }
-                else
-                {
-                    // Wampus left the room
-                    MoveUnit(WampusPtr, WampusPtr->CavePtr, WampusPtr->CavePtr->AdjacentCaves[roll_d3()-1]);
-                }
+                // Wampus left the room
+                Self->SP->FadeOutAllExceptBackground(1);
+                Sleep(2);
+                SP->Play(SoundName::NEAR_WAMPUS_AWAKE);
+                GUI->InfoDiag->ShowInfo(GUI->InfoDiag->WAMPUS_RUN);
+                MoveUnit(WampusPtr, WampusPtr->CavePtr, WampusPtr->CavePtr->AdjacentCaves[roll_d3() - 1]);            
             }
         }
     }
-    
-
 }
 
 bool Game::IsDialogOpen()

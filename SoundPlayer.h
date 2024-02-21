@@ -21,9 +21,11 @@ enum class SoundName
 	BOW_READY,
 	BOW_STRING,
 	ARROW_WHOOSH,
+	SAD_TROMBONE,
 
 	WAMPUS_WAKE_UP,
 	WAMPUS_DIE,
+	BATS_IN_FACE,
 };
 
 struct Sound
@@ -54,13 +56,13 @@ public:
 	void StopAllExceptBackground();
 	void FadeOutAllExceptBackground(int Seconds);
 private:
-	Sound Sounds[13]
+	Sound Sounds[15]
 	{
 		{2,		SoundName::BACKGROUND,			"Sounds\\BACKGROUND.wav",			true},
 
 		{0.1,	SoundName::PLAYER_WALK,			"Sounds\\PLAYER_WALK.wav"				},
 		{0.8,	SoundName::PLAYER_DIE,			"Sounds\\PLAYER_DIE.wav"				},
-		{0.8,	SoundName::PLAYER_FALL,			"Sounds\\PLAYER_FALL.wav"				},
+		{0.5,	SoundName::PLAYER_FALL,			"Sounds\\PLAYER_FALL.wav"				},
 
 		{1,		SoundName::NEAR_BATS,			"Sounds\\NEAR_BATS.wav",			true},
 		{1.2,	SoundName::NEAR_WAMPUS_SLEEP,	"Sounds\\NEAR_WAMPUS_SLEEP.wav",	true},
@@ -70,9 +72,11 @@ private:
 		{0.2,	SoundName::BOW_READY,			"Sounds\\BOW_READY.wav"					},
 		{1,		SoundName::BOW_STRING,			"Sounds\\BOW_STRING.wav",				},
 		{1,		SoundName::ARROW_WHOOSH,		"Sounds\\ARROW_WHOOSH.wav",				},
+		{1,		SoundName::SAD_TROMBONE,		"Sounds\\SAD_TROMBONE.wav",				},
 
 		{1,		SoundName::WAMPUS_WAKE_UP,		"Sounds\\WAMPUS_WAKE_UP.wav",			},
 		{1,		SoundName::WAMPUS_DIE,			"Sounds\\WAMPUS_DIE.wav",				},
+		{1,		SoundName::BATS_IN_FACE,		"Sounds\\BATS_IN_FACE.wav",				},
 	};
 	void LoadFiles();
 };

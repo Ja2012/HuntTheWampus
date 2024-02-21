@@ -93,4 +93,5 @@ namespace Consts
 	inline const char* GameOverImgFileName{ "Images\\GameOver.png" };
 	inline const char* YouWinImgFileName{ "Images\\YOU_WIN.png" };
 	inline const char* BatsImgFileName{ "Images\\BATS.png" };
+	inline const char* WampusImgFileName{ "Images\\WAMPUS.png" };
 }
